@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -68,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.security, color: Colors.red, size: 80),
+            Icon(Icons.security, color: AppColors.primary, size: 80),
             SizedBox(height: 28),
             Text(
               'Benvenuto in Guardian Angel!',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/main.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import 'vitals_screen.dart';
@@ -16,7 +17,7 @@ class GuardianAngelApp extends StatelessWidget {
       title: 'Guardian Angel',
       theme: ThemeData(
         fontFamily: 'Roboto',
-        scaffoldBackgroundColor: Color(0xFFD0EEC8), // verde delicato
+        scaffoldBackgroundColor: AppColors.background, 
       ),
       home: const MainScreen(),
     );
@@ -59,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: _onItemTapped,
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
-        backgroundColor: Color(0xFFF7F7F7),
+        backgroundColor: Colors.white,
       ),
     );
   }
