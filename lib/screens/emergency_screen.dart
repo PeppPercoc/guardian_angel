@@ -48,7 +48,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: const Text('EMERGENCY ACTIVE', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('EMERGENCY ACTIVE', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
         centerTitle: true,
         toolbarHeight: 56,
         automaticallyImplyLeading: false,

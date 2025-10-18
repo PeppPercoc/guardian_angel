@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:guardian_angel/main.dart';
@@ -47,6 +49,98 @@ class _MainScreenState extends State<MainScreen> {
       _selectedIndex = index;
     });
   }
+Future<void> showSOSDialog(BuildContext context) async {
+  int seconds = 10;
+  bool cancelled = false;
+  late StateSetter dialogSetState;
+  Timer? timer;
+
+  timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (!cancelled) {
+      if (seconds > 0) {
+        dialogSetState(() {
+          seconds--;
+        });
+      } else {
+        timer.cancel();
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+      }
+    }
+  });
+
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          dialogSetState = setState;
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            contentPadding: const EdgeInsets.all(20),
+            title: Row(
+              children: const [
+                Icon(Icons.warning_amber_rounded, color: AppColors.primary, size: 28),
+                SizedBox(width: 12),
+                Text('Emergency Alert', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'An SOS countdown has started.\nYour emergency contacts will be notified in',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '$seconds',
+                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary),
+                ),
+                const Text('seconds unless you cancel.', style: TextStyle(fontSize: 16)),
+              ],
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  cancelled = true;
+                  timer?.cancel();
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.black87,
+                  minimumSize: const Size(150, 45),
+                ),
+                icon: const Icon(Icons.close),
+                label: const Text('Cancel SOS'),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  cancelled = false;
+                  timer?.cancel();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(150, 45),
+                ),
+                icon: const Icon(Icons.send),
+                label: const Text('Send Now'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+  timer.cancel();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +154,7 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const EmergencyScreen(),
-                ),
-              );
+              showSOSDialog(context);
             },
             child: Container(
               color: Colors.red,
