@@ -1,66 +1,28 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'screens/scheduler_screen.dart';
-import 'screens/vitals_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/welcome_screen.dart';
+import 'screens/main_screen.dart';
 
-void main() {
-  runApp(const GuardianAngelApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final seen = prefs.getBool('introSeen') ?? false;
+  runApp(GuardianAngelApp(showIntro: !seen));
 }
 
 class GuardianAngelApp extends StatelessWidget {
-  const GuardianAngelApp({super.key});
+  final bool showIntro;
+  const GuardianAngelApp({super.key, required this.showIntro});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Guardian Angel',
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: Color(0xFFD0EEC8), // verde delicato
-      ),
-      home: const MainScreen(),
-    );
-  }
-}
-
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  static final List<Widget> _pages = <Widget>[
-    HomeScreen(),
-    SchedulerScreen(),
-    VitalsScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.medication), label: 'Scheduler'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Vitals'),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Color(0xFFF7F7F7),
-      ),
+      initialRoute: showIntro ? '/welcome' : '/main',
+      routes: {
+        '/welcome': (context) => const WelcomeScreen(),
+        '/main': (context) => const MainScreen(),
+      },
     );
   }
 }
