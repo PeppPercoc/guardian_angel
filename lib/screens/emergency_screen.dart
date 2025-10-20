@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/user.dart';
+import '../models/blood_type.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -10,16 +12,7 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
-  // Variabili per le info recuperate
-  String? name;
-  String? dob;
-  String? bloodType;
-  String? allergies;
-  String? conditions;
-  String? contactName;
-  String? contactPhone;
-  String? medications;
-  String? notes;
+  User? _user;
 
   @override
   void initState() {
@@ -29,17 +22,28 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
   Future<void> _loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      name = prefs.getString('userName') ?? '---';
-      dob = prefs.getString('userDOB') ?? '---';
-      bloodType = prefs.getString('userBloodType') ?? '---';
-      allergies = prefs.getString('userAllergies') ?? '---';
-      conditions = prefs.getString('userConditions') ?? '---';
-      contactName = prefs.getString('userContactName') ?? '---';
-      contactPhone = prefs.getString('userContactPhone') ?? '---';
-      medications = prefs.getString('userMedications') ?? '---';
-      notes = prefs.getString('userNotes') ?? '---';
-    });
+    final userJson = prefs.getString('user_data');
+
+    if (userJson != null) {
+      setState(() {
+        _user = User.decode(userJson);
+      });
+    } else {
+      setState(() {
+        _user = User(
+          name: '---',
+          surname: '---',
+          dob: DateTime(1900, 1, 1),
+          bloodType: BloodType.oPositive,
+          allergies: '---',
+          conditions: '---',
+          contactName: '---',
+          contactPhone: '---',
+          medications: '---',
+          notes: '---',
+        );
+      });
+    }
   }
 
   @override
@@ -67,56 +71,59 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 22,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _infoRow(
                         icon: Icons.person,
                         label: 'Full Name',
-                        value: name ?? '',
+                        value: _user?.name ?? '---',
                       ),
                       _infoRow(
                         icon: Icons.calendar_month,
                         label: 'Date of Birth',
-                        value: dob ?? '',
-                        valueStyle: TextStyle(color: Colors.green),
+                        value: _user != null
+                            ? '${_user!.dob.day}/${_user!.dob.month}/${_user!.dob.year}'
+                            : '---',
+                        valueStyle: const TextStyle(color: Colors.green),
                       ),
                       _infoRow(
                         icon: Icons.bloodtype,
                         label: 'Blood Type',
-                        value: bloodType ?? '',
-                        valueStyle: TextStyle(color: Colors.red),
+                        value: _user != null
+                            ? bloodTypeToString(_user!.bloodType)
+                            : '---',
+                        valueStyle: const TextStyle(color: Colors.red),
                       ),
                       _infoRow(
                         icon: Icons.warning,
                         label: 'Allergies',
-                        value: allergies ?? '',
-                        valueStyle: TextStyle(color: Colors.red),
+                        value: _user?.allergies ?? '---',
+                        valueStyle: const TextStyle(color: Colors.red),
                       ),
                       _infoRow(
                         icon: Icons.medical_services,
                         label: 'Medical Conditions',
-                        value: conditions ?? '',
+                        value: _user?.conditions ?? '---',
                       ),
                       _infoRow(
                         icon: Icons.call,
                         label: 'Emergency Contact',
-                        value: '${contactName ?? ''} – ${contactPhone ?? ''}',
-                        valueStyle: TextStyle(color: Colors.green),
+                        value:
+                            '${_user?.contactName ?? '---'} – ${_user?.contactPhone ?? '---'}',
+                        valueStyle: const TextStyle(color: Colors.green),
                       ),
                       _infoRow(
                         icon: Icons.medication,
                         label: 'Medications',
-                        value: medications ?? '',
+                        value: _user?.medications ?? '---',
                       ),
                       _infoRow(
                         icon: Icons.info,
                         label: 'Additional Notes',
-                        value: notes ?? '',
+                        value: _user?.notes ?? '---',
                       ),
                     ],
                   ),
@@ -125,17 +132,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 20,
-              top: 6,
-            ),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Azione chiamata emergenza da implementare
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -151,9 +156,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 ),
                 const SizedBox(height: 14),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -202,7 +205,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 Text(
                   value,
                   style: valueStyle.merge(
-                    TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                    const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
