@@ -198,24 +198,60 @@ class _MainScreenState extends State<MainScreen> {
               showSOSDialog(context);
             },
             child: Container(
-              color: Colors.red,
-              height: 56,
               width: double.infinity,
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.warning_rounded, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text(
-                    'SOS EMERGENCY',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: Colors.red,
+              ),
+              child: SafeArea(
+                bottom: false,
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 14,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade700,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.warning_rounded,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'SOS EMERGENCY',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -225,13 +261,13 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
           ),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withAlpha((0.25 * 255).round()),
               blurRadius: 20,
               offset: const Offset(0, -3),
             ),
