@@ -48,73 +48,129 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: const Text('EMERGENCY ACTIVE', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+        title: const Text(
+          'EMERGENCY ACTIVE',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         centerTitle: true,
         toolbarHeight: 56,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _infoRow(icon: Icons.person, label: 'Full Name', value: name ?? ''),
-                    _infoRow(icon: Icons.calendar_month, label: 'Date of Birth', value: dob ?? '', valueStyle: TextStyle(color: Colors.green)),
-                    _infoRow(icon: Icons.bloodtype, label: 'Blood Type', value: bloodType ?? '', valueStyle: TextStyle(color: Colors.red)),
-                    _infoRow(icon: Icons.warning, label: 'Allergies', value: allergies ?? '', valueStyle: TextStyle(color: Colors.red)),
-                    _infoRow(icon: Icons.medical_services, label: 'Medical Conditions', value: conditions ?? ''),
-                    _infoRow(icon: Icons.call, label: 'Emergency Contact', value: '${contactName ?? ''} – ${contactPhone ?? ''}', valueStyle: TextStyle(color: Colors.green)),
-                    _infoRow(icon: Icons.medication, label: 'Medications', value: medications ?? ''),
-                    _infoRow(icon: Icons.info, label: 'Additional Notes', value: notes ?? ''),
-                  ],
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 22,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _infoRow(
+                        icon: Icons.person,
+                        label: 'Full Name',
+                        value: name ?? '',
+                      ),
+                      _infoRow(
+                        icon: Icons.calendar_month,
+                        label: 'Date of Birth',
+                        value: dob ?? '',
+                        valueStyle: TextStyle(color: Colors.green),
+                      ),
+                      _infoRow(
+                        icon: Icons.bloodtype,
+                        label: 'Blood Type',
+                        value: bloodType ?? '',
+                        valueStyle: TextStyle(color: Colors.red),
+                      ),
+                      _infoRow(
+                        icon: Icons.warning,
+                        label: 'Allergies',
+                        value: allergies ?? '',
+                        valueStyle: TextStyle(color: Colors.red),
+                      ),
+                      _infoRow(
+                        icon: Icons.medical_services,
+                        label: 'Medical Conditions',
+                        value: conditions ?? '',
+                      ),
+                      _infoRow(
+                        icon: Icons.call,
+                        label: 'Emergency Contact',
+                        value: '${contactName ?? ''} – ${contactPhone ?? ''}',
+                        valueStyle: TextStyle(color: Colors.green),
+                      ),
+                      _infoRow(
+                        icon: Icons.medication,
+                        label: 'Medications',
+                        value: medications ?? '',
+                      ),
+                      _infoRow(
+                        icon: Icons.info,
+                        label: 'Additional Notes',
+                        value: notes ?? '',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            const Spacer(),
-            Row(
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 20,
+              top: 6,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Botttone finto (non chiama nessuno)
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      minimumSize: const Size.fromHeight(50),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const Text('Call Emergency Contact', style: TextStyle(fontSize: 18,color: Colors.white)),
+                  ),
+                  child: const Text(
+                    'Call Emergency Contact',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text(
+                    'End Emergency',
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      minimumSize: const Size.fromHeight(50),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-                    child: const Text('End Emergency', style: TextStyle(fontSize: 18,color: Colors.white)),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -135,8 +191,20 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(fontSize: 15, color: Colors.grey[600], fontWeight: FontWeight.bold)),
-                Text(value, style: valueStyle.merge(TextStyle(fontSize: 17, fontWeight: FontWeight.w600))),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: valueStyle.merge(
+                    TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  ),
+                ),
               ],
             ),
           ),
