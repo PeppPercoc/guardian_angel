@@ -63,9 +63,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       return Theme(
         data: Theme.of(context).copyWith(
           colorScheme: ColorScheme.light(
-            primary: AppColors.secondary,  // colore principale tappabile (verde)
-            onPrimary: Colors.white,        // colore testo sul tappabile
-            onSurface: AppColors.textDark, // colore testo data e testo normale
+            primary: AppColors.secondary,
+            onPrimary: Colors.white,
+            onSurface: AppColors.textDark, 
           ),
         ),
         child: child ?? const SizedBox.shrink(),
@@ -148,7 +148,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               style: TextButton.styleFrom(
                 foregroundColor:
-                    Colors.grey[700], // Colore testo personalizzato
+                    Colors.grey[700],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -163,7 +163,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ElevatedButton(
             onPressed: () async {
               if (_pageIndex == 0) {
-                // La pagina welcome non ha form, passi avanti sempre
                 _controller.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.ease,
@@ -186,14 +185,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondary, // Colore di sfondo personalizzato
-              foregroundColor: Colors.white, // Colore testo e icone
+              backgroundColor: AppColors.secondary,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                // Forma personalizzata
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.symmetric(
-                // Padding personalizzato
                 vertical: 16,
                 horizontal: 24,
               ),

@@ -16,8 +16,6 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.green,
       ),
     );
-
-    // Navigazione sicura alla welcome eliminando tutta la pila
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
 

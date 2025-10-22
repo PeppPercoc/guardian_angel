@@ -11,12 +11,47 @@ class AppColors {
   static const textDark = Color(0xFF263238);
 }
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final introSeen = prefs.getBool('introSeen') ?? false;
+  runApp(const GuardianAngelRoot());
+  
+}
 
-  runApp(GuardianAngelApp(showIntro: !introSeen));
+class GuardianAngelRoot extends StatefulWidget {
+  const GuardianAngelRoot({super.key});
+
+  @override
+  State<GuardianAngelRoot> createState() => _GuardianAngelRootState();
+}
+
+class _GuardianAngelRootState extends State<GuardianAngelRoot> {
+  bool? showIntro; // null = loading, true/false = decisione
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPrefs();
+  }
+
+  Future<void> _loadPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final introSeen = prefs.getBool('introSeen') ?? false;
+    setState(() {
+      showIntro = !introSeen;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (showIntro == null) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+    return GuardianAngelApp(showIntro: showIntro!);
+  }
 }
 
 class GuardianAngelApp extends StatelessWidget {
