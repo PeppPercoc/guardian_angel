@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
 
@@ -14,6 +15,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final PageController _controller = PageController();
   int _pageIndex = 0;
 
+  // Chiavi dei form per pagine con form
+  final _userFormKey = GlobalKey<FormState>();
+  final _medicalFormKey = GlobalKey<FormState>();
+  final _contactFormKey = GlobalKey<FormState>();
+
   // Controller dei campi
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
@@ -26,16 +32,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _contactPhoneController = TextEditingController();
   final _medicationsController = TextEditingController();
   final _notesController = TextEditingController();
-
-  bool get _isFormValid {
-    return _nameController.text.isNotEmpty &&
-        _surnameController.text.isNotEmpty &&
-        _dob != null &&
-        _allergiesController.text.isNotEmpty &&
-        _conditionsController.text.isNotEmpty &&
-        _contactNameController.text.isNotEmpty &&
-        _contactPhoneController.text.isNotEmpty;
-  }
 
   Future<void> _saveAndContinue() async {
     final prefs = await SharedPreferences.getInstance();
@@ -63,6 +59,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       initialDate: _dob ?? DateTime(2000, 1, 1),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+       builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: AppColors.secondary,  // colore principale tappabile (verde)
+            onPrimary: Colors.white,        // colore testo sul tappabile
+            onSurface: AppColors.textDark, // colore testo data e testo normale
+          ),
+        ),
+        child: child ?? const SizedBox.shrink(),
+      );
+    },
     );
     if (picked != null) {
       setState(() {
@@ -70,21 +78,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         _dobController.text = '${picked.day}/${picked.month}/${picked.year}';
       });
     }
-  }
-
-  void _updateFormState() {
-    setState(() {}); // trigger rebuild per abilitare/disabilitare il bottone
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController.addListener(_updateFormState);
-    _surnameController.addListener(_updateFormState);
-    _allergiesController.addListener(_updateFormState);
-    _conditionsController.addListener(_updateFormState);
-    _contactNameController.addListener(_updateFormState);
-    _contactPhoneController.addListener(_updateFormState);
   }
 
   @override
@@ -98,50 +91,121 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _contactPhoneController.dispose();
     _medicationsController.dispose();
     _notesController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _controller,
-        onPageChanged: (index) => setState(() => _pageIndex = index),
-        children: [
-          _buildWelcomePage(),
-          _buildUserInfoPage(),
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 18.0, left: 12, right: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SafeArea(
+        child: Column(
           children: [
-            if (_pageIndex > 0)
-              TextButton(
-                onPressed: () => _controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease),
-                child: const Text('Indietro'),
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) => setState(() => _pageIndex = index),
+                children: [
+                  _buildWelcomePage(),
+                  _buildUserInfoPage(),
+                  _buildMedicalInfoPage(),
+                  _buildContactInfoPage(),
+                ],
               ),
-            const Spacer(),
-            (_pageIndex == 0)
-                ? ElevatedButton(
-                    onPressed: () => _controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease),
-                    child: const Text('Avanti'),
-                  )
-                : ElevatedButton(
-                    onPressed: _isFormValid ? _saveAndContinue : null,
-                    child: const Text('Salva e inizia'),
-                  )
+            ),
+            if (_pageIndex > 0) ...[
+              const SizedBox(height: 10),
+              SmoothPageIndicator(
+                controller: _controller,
+                count: 4,
+                effect: WormEffect(
+                  activeDotColor: AppColors.secondary,
+                  dotHeight: 10,
+                  dotWidth: 10,
+                ),
+              ),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 20),
+              _buildNavigationButtons()
           ],
         ),
       ),
     );
   }
 
+  Widget _buildNavigationButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+      child: Row(
+        children: [
+          if (_pageIndex > 0)
+            TextButton(
+              onPressed: () => _controller.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              ),
+              style: TextButton.styleFrom(
+                foregroundColor:
+                    Colors.grey[700], // Colore testo personalizzato
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 24,
+                ),
+              ),
+              child: const Text('Indietro'),
+            ),
+          const Spacer(),
+          ElevatedButton(
+            onPressed: () async {
+              if (_pageIndex == 0) {
+                // La pagina welcome non ha form, passi avanti sempre
+                _controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              } else if (_pageIndex == 1 &&
+                  _userFormKey.currentState!.validate()) {
+                _controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              } else if (_pageIndex == 2 &&
+                  _medicalFormKey.currentState!.validate()) {
+                _controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              } else if (_pageIndex == 3 &&
+                  _contactFormKey.currentState!.validate()) {
+                await _saveAndContinue();
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondary, // Colore di sfondo personalizzato
+              foregroundColor: Colors.white, // Colore testo e icone
+              shape: RoundedRectangleBorder(
+                // Forma personalizzata
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(
+                // Padding personalizzato
+                vertical: 16,
+                horizontal: 24,
+              ),
+            ),
+            child: Text(_pageIndex == 3 ? 'Conferma' : 'Avanti'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Pagina welcome iniziale
   Widget _buildWelcomePage() {
     return Center(
       child: Padding(
@@ -149,7 +213,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.security, color: AppColors.primary, size: 80),
+            Icon(Icons.security, color: AppColors.secondary, size: 80),
             const SizedBox(height: 28),
             const Text(
               'Benvenuto in Guardian Angel!',
@@ -168,75 +232,146 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
+  // Pagina 1: Dati utente
   Widget _buildUserInfoPage() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text('I tuoi dati:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 18),
-          TextField(
+      padding: const EdgeInsets.all(24),
+      child: Form(
+        key: _userFormKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Informazioni personali',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Nome')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(labelText: 'Nome'),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci il nome' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
               controller: _surnameController,
-              decoration: const InputDecoration(labelText: 'Cognome')),
-          const SizedBox(height: 12),
-          GestureDetector(
-            onTap: _pickDOB,
-            child: AbsorbPointer(
-              child: TextField(
-                controller: _dobController,
-                readOnly: true,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_month),
-                  labelText: 'Data di nascita',
-                  hintText: 'Seleziona data',
+              decoration: const InputDecoration(labelText: 'Cognome'),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci il cognome' : null,
+            ),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: _pickDOB,
+              child: AbsorbPointer(
+                child: TextFormField(
+                  controller: _dobController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.calendar_month),
+                    labelText: 'Data di nascita',
+                  ),
+                  validator: (_) =>
+                      _dob == null ? 'Inserisci la data di nascita' : null,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          DropdownButtonFormField<BloodType>(
-            value: _selectedBloodType,
-            items: BloodType.values.map((type) {
-              return DropdownMenuItem(
-                value: type,
-                child: Text(bloodTypeToString(type)),
-              );
-            }).toList(),
-            onChanged: (val) => setState(() => _selectedBloodType = val ?? BloodType.oPositive),
-            decoration: const InputDecoration(labelText: 'Gruppo sanguigno'),
-          ),
-          const SizedBox(height: 12),
-          TextField(
+            const SizedBox(height: 12),
+            DropdownButtonFormField<BloodType>(
+              value: _selectedBloodType,
+              items: BloodType.values.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(bloodTypeToString(type)),
+                );
+              }).toList(),
+              onChanged: (val) => setState(
+                () => _selectedBloodType = val ?? BloodType.oPositive,
+              ),
+              decoration: const InputDecoration(labelText: 'Gruppo sanguigno'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Pagina 2: Dati medici
+  Widget _buildMedicalInfoPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Form(
+        key: _medicalFormKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Informazioni mediche',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
               controller: _allergiesController,
-              decoration: const InputDecoration(labelText: 'Allergie')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(labelText: 'Allergie'),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci allergie' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
               controller: _conditionsController,
-              decoration: const InputDecoration(labelText: 'Condizioni mediche')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(
+                labelText: 'Condizioni mediche',
+              ),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci condizioni' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
               controller: _medicationsController,
-              decoration: const InputDecoration(labelText: 'Farmaci')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(labelText: 'Farmaci'),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
               controller: _notesController,
-              decoration: const InputDecoration(labelText: 'Note aggiuntive')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(labelText: 'Note aggiuntive'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Pagina 3: Contatto emergenza
+  Widget _buildContactInfoPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Form(
+        key: _contactFormKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Contatto di emergenza',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
               controller: _contactNameController,
-              decoration: const InputDecoration(labelText: 'Contatto emergenza')),
-          const SizedBox(height: 12),
-          TextField(
+              decoration: const InputDecoration(
+                labelText: 'Nome contatto emergenza',
+              ),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci nome contatto' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
               controller: _contactPhoneController,
-              decoration: const InputDecoration(labelText: 'Telefono emergenza')),
-        ],
+              decoration: const InputDecoration(
+                labelText: 'Telefono contatto emergenza',
+              ),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Inserisci telefono' : null,
+            ),
+          ],
+        ),
       ),
     );
   }
