@@ -24,12 +24,6 @@ class _MainScreenState extends State<MainScreen> {
     VitalsScreen(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   Future<void> showSOSDialog(BuildContext context) async {
     int seconds = 10;
     bool cancelled = false;
@@ -203,6 +197,7 @@ class _MainScreenState extends State<MainScreen> {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
+                          // ignore: deprecated_member_use
                           color: Colors.black.withOpacity(0.2),
                           blurRadius: 8,
                           offset: Offset(0, 4),

@@ -276,7 +276,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<BloodType>(
-              value: _selectedBloodType,
+              initialValue: _selectedBloodType,
               items: BloodType.values.map((type) {
                 return DropdownMenuItem(
                   value: type,
