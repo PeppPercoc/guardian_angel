@@ -8,26 +8,6 @@ import 'scheduler_screen.dart';
 import 'vitals_screen.dart';
 import 'emergency_screen.dart';
 
-void main() {
-  runApp(const GuardianAngelApp());
-}
-
-class GuardianAngelApp extends StatelessWidget {
-  const GuardianAngelApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Guardian Angel',
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: AppColors.background,
-      ),
-      home: const MainScreen(),
-    );
-  }
-}
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
