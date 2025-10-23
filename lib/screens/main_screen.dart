@@ -6,6 +6,7 @@ import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import 'vitals_screen.dart';
 import 'emergency_screen.dart';
+import '../services/medicine_database_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,7 +16,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final MedicineDatabase medicineDatabase = MedicineDatabase();
   int _selectedIndex = 1;
+  bool _isDBReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDatabase();
+  }
 
   static final List<Widget> _pages = <Widget>[
     SchedulerScreen(),
@@ -156,8 +165,18 @@ class _MainScreenState extends State<MainScreen> {
     timer.cancel();
   }
 
+  Future<void> _initDatabase() async {
+    await medicineDatabase.init();
+    setState(() {
+      _isDBReady = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_isDBReady) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     double screenWidth = MediaQuery.of(context).size.width;
 
     // 5% del lato

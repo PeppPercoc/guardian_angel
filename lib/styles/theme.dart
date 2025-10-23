@@ -14,11 +14,19 @@ final ThemeData appTheme = ThemeData(
   textTheme: const TextTheme(
     bodyLarge: TextStyle(fontSize: 18, color: AppColors.textDark),
     titleLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-    labelLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+    labelLarge: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      color: Colors.white,
+    ),
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: AppColors.primary,
-    titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+    backgroundColor: AppColors.secondary,
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+      color: Colors.white,
+    ),
     centerTitle: true,
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -28,5 +36,15 @@ final ThemeData appTheme = ThemeData(
     selectedItemColor: AppColors.secondary,
     unselectedItemColor: Colors.grey,
     backgroundColor: Color(0xFFF7F7F7),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(color: AppColors.secondary),
+    hintStyle: TextStyle(color: AppColors.secondary),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: AppColors.secondary,
+        width: 2,
+      ),
+    ),
   ),
 );
