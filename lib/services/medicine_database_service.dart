@@ -1,31 +1,35 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../models/medicine.dart';
+
 
 class MedicineDatabase {
   static const String boxName = 'medicines';
-  late Box<Medicines> _box;
+  late Box<Medicine> _box;
 
   // Inizializza Hive e apre la box (da chiamare all'avvio app)
   Future<void> init() async {
-    _box = await Hive.openBox<Medicines>(boxName);
+    await Hive.initFlutter();
+    Hive.registerAdapter(RepeatAdapter());
+    Hive.registerAdapter(MedicineAdapter());
+    _box = await Hive.openBox<Medicine>(boxName);
   }
 
   // Aggiunge una nuova medicina
-  Future<void> addMedicine(Medicines medicine) async {
+  Future<void> addMedicine(Medicine medicine) async {
     await _box.add(medicine);
   }
 
   // Recupera tutte le medicine salvate
-  List<Medicines> getAllMedicines() {
+  List<Medicine> getAllMedicines() {
     return _box.values.toList();
   }
 
   // Esempio di query: recupera medicine il cui nome contiene una stringa (case insensitive)
-  List<Medicines> queryMedicinesByName(String namePart) {
+  List<Medicine> queryMedicinesByName(String namePart) {
     final nameLower = namePart.toLowerCase();
-    return _box.values.where((med) =>
-      med.name.toLowerCase().contains(nameLower)
-    ).toList();
+    return _box.values
+        .where((med) => med.name.toLowerCase().contains(nameLower))
+        .toList();
   }
 
   // Elimina una medicina per indice

@@ -17,7 +17,7 @@ enum Repeat { // enum per i tipi di ricorrenza
 }
 
 @HiveType(typeId: 8)
-class Medicines extends HiveObject {
+class Medicine extends HiveObject {
   @HiveField(0)
   String name;
 
@@ -39,7 +39,7 @@ class Medicines extends HiveObject {
   @HiveField(6)
   String? notes;
 
-  Medicines({
+  Medicine({
     required this.name,
     required this.dosage,
     required this.instructions,
