@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/main_screen.dart';
 
-// Esempio di classe colori riutilizzabile
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const GuardianAngelRoot());

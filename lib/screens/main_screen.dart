@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:guardian_angel/main.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
