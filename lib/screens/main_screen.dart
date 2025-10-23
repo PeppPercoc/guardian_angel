@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:guardian_angel/main.dart';
+import 'package:guardian_angel/styles/theme.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import 'vitals_screen.dart';
@@ -161,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    // Calcola un padding orizzontale dinamico, magari 5% della larghezza per lato
+    // 5% del lato
     double horizontalPadding = screenWidth * 0.05;
 
     return Scaffold(
