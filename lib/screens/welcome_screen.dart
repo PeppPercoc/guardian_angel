@@ -53,33 +53,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Navigator.of(context).pushReplacementNamed("/main");
   }
 
-  Future<void> _pickDOB() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _dob ?? DateTime(2000, 1, 1),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-       builder: (BuildContext context, Widget? child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(
-            primary: AppColors.secondary,
-            onPrimary: Colors.white,
-            onSurface: AppColors.textDark, 
-          ),
-        ),
-        child: child ?? const SizedBox.shrink(),
-      );
-    },
-    );
-    if (picked != null) {
-      setState(() {
-        _dob = picked;
-        _dobController.text = '${picked.day}/${picked.month}/${picked.year}';
-      });
-    }
-  }
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -128,7 +101,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const SizedBox(height: 10),
             ] else
               const SizedBox(height: 20),
-              _buildNavigationButtons()
+            _buildNavigationButtons(),
           ],
         ),
       ),
@@ -147,8 +120,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 curve: Curves.easeInOut,
               ),
               style: TextButton.styleFrom(
-                foregroundColor:
-                    Colors.grey[700],
+                foregroundColor: Colors.grey[700],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -188,12 +160,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               backgroundColor: AppColors.secondary,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(30),
               ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 24,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             ),
             child: Text(_pageIndex == 3 ? 'Conferma' : 'Avanti'),
           ),
@@ -257,20 +226,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   v == null || v.isEmpty ? 'Inserisci il cognome' : null,
             ),
             const SizedBox(height: 12),
-            GestureDetector(
-              onTap: _pickDOB,
-              child: AbsorbPointer(
-                child: TextFormField(
-                  controller: _dobController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.calendar_month),
-                    labelText: 'Data di nascita',
-                  ),
-                  validator: (_) =>
-                      _dob == null ? 'Inserisci la data di nascita' : null,
-                ),
+            TextFormField(
+              readOnly: true,
+              controller: _dobController,
+              decoration: const InputDecoration(
+                labelText: 'Data di nascita',
+                hintText: 'Seleziona una data',
+                suffixIcon: Icon(Icons.calendar_today),
               ),
+              validator: (_) =>
+                  _dob == null ? 'Inserisci la data di nascita' : null,
+              onTap: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: _dob ?? DateTime(2000, 1, 1),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+
+                if (pickedDate != null) {
+                  setState(() {
+                    _dob = pickedDate;
+                    _dobController.text =
+                        '${pickedDate.day.toString().padLeft(2, '0')}/'
+                        '${pickedDate.month.toString().padLeft(2, '0')}/'
+                        '${pickedDate.year}';
+                  });
+                }
+              },
             ),
+
             const SizedBox(height: 12),
             DropdownButtonFormField<BloodType>(
               initialValue: _selectedBloodType,
