@@ -26,8 +26,8 @@ class _MainScreenState extends State<MainScreen> {
     _initDatabase();
   }
 
-  static final List<Widget> _pages = <Widget>[
-    SchedulerScreen(),
+   List<Widget> get _pages => [
+    SchedulerScreen(medicineDatabase: medicineDatabase),
     HomeScreen(),
     VitalsScreen(),
   ];

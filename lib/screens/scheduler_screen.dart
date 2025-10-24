@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/services/medicine_database_service.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/medicine.dart';
 import 'add_medicine_screen.dart';
 
 class SchedulerScreen extends StatefulWidget {
-  const SchedulerScreen({super.key});
+  final MedicineDatabase medicineDatabase;
+  const SchedulerScreen({super.key, required this.medicineDatabase});
 
   @override
   State<SchedulerScreen> createState() => _SchedulerScreenState();
 }
 
 class _SchedulerScreenState extends State<SchedulerScreen> {
-  late Box<Medicine> _box;
 
   @override
   void initState() {
     super.initState();
-    _box = Hive.box<Medicine>('medicines');
   }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: _box.listenable(),
+      valueListenable: widget.medicineDatabase.listenable,
       builder: (context, Box<Medicine> box, _) {
-        final medicines = box.values.toList();
+        final medicines = widget.medicineDatabase.getAllMedicines();
 
         return Scaffold(
           appBar: AppBar(
@@ -53,7 +53,7 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                             color: Colors.green.shade700,
                           ),
                           onPressed: () async {
-                            _box.deleteAt(index);
+                            await widget.medicineDatabase.deleteMedicine(index);
                           },
                         ),
                         onTap: () {
@@ -69,9 +69,11 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) => AddMedicineForm(
+                    medicineDatabase: widget.medicineDatabase,
                   onSave: (medicine) async {
                     final box = Hive.box<Medicine>('medicines');
                     await box.add(medicine);
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   },
                 ),

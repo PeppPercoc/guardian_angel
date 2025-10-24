@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import '../models/medicine.dart';
+import '../services/medicine_database_service.dart';
 
 typedef OnSaveCallback = void Function(Medicine medicine);
 
 class AddMedicineForm extends StatefulWidget {
   final OnSaveCallback onSave;
-
-  const AddMedicineForm({super.key, required this.onSave});
+  final MedicineDatabase medicineDatabase;
+  const AddMedicineForm({
+    super.key,
+    required this.onSave,
+    required this.medicineDatabase,
+  });
 
   @override
   State<AddMedicineForm> createState() => _AddMedicineFormState();
@@ -23,33 +28,66 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
   DateTime? endDate;
   String? notes;
 
+  bool _submitted = false;
+
   void _pickTime() async {
     final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
+
     if (picked != null) {
       setState(() {
-        reminderTimes.add(picked.format(context));
+        reminderTimes.clear();
+        reminderTimes.add(_formatTime(picked));
+
+        switch (repeat) {
+          case Repeat.oncePerDay:
+            break;
+
+          case Repeat.twicePerDay:
+            // Ogni 12 ore
+            reminderTimes.add(_addHours(picked, 12));
+            break;
+
+          case Repeat.thricePerDay:
+            // Ogni 8 ore
+            reminderTimes
+              ..add(_addHours(picked, 8))
+              ..add(_addHours(picked, 16));
+            break;
+
+          case Repeat.onceEveryTwoDays:
+            // Solo l'orario, ma ripetuto ogni 48 ore (gestirai in futuro la logica di notifica)
+            break;
+
+          case Repeat.oncePerWeek:
+            // Solo l'orario scelto (gestibile in futuro con giorni della settimana)
+            break;
+        }
       });
     }
   }
 
-  void _saveMedicine() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      final med = Medicine(
-        name: name,
-        dosage: dosage,
-        instructions: instructions,
-        repeat: repeat,
-        reminderTimes: reminderTimes,
-        endDate: endDate,
-        notes: notes,
-      );
-      widget.onSave(med);
-    }
+  // Funzione di supporto per aggiungere ore e formattare correttamente
+  String _addHours(TimeOfDay time, int addHours) {
+    final now = DateTime.now();
+    final initial = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      time.hour,
+      time.minute,
+    );
+    final added = initial.add(Duration(hours: addHours));
+
+    // Se supera le 24 ore, torna al formato corretto (es. 00:00)
+    final fixed = TimeOfDay(hour: added.hour % 24, minute: added.minute);
+    return _formatTime(fixed);
   }
+
+  String _formatTime(TimeOfDay t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
   @override
   Widget build(BuildContext context) {
@@ -93,23 +131,39 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
               const SizedBox(height: 10),
 
               // Reminder Time(s)
-              Row(
+              Column(
                 children: [
-                  Expanded(
-                    child: Text(
-                      reminderTimes.isEmpty
-                          ? 'No times chosen'
-                          : reminderTimes.join(', '),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          reminderTimes.isEmpty
+                              ? 'No times chosen'
+                              : reminderTimes.join(', '),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.access_time),
+                        onPressed: _pickTime,
+                      ),
+                    ],
+                  ),
+                  const Divider(
+                    thickness: 1, // spessore linea
+                    color: Colors.grey, // colore linea
+                    height: 20, // spazio tra row e divider
+                  ),
+                  if (_submitted && reminderTimes.isEmpty)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Required',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.access_time),
-                    onPressed: _pickTime,
-                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
-              const SizedBox(height: 10),
-
               // Repeat
               Align(alignment: Alignment.centerLeft, child: Text('Repeat:')),
               Wrap(
@@ -120,7 +174,9 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     selected: repeat == rep,
                     selectedColor: AppColors.secondary,
                     disabledColor: AppColors.background,
-                    labelStyle: TextStyle(color: repeat == rep ? Colors.white : AppColors.secondary,),
+                    labelStyle: TextStyle(
+                      color: repeat == rep ? Colors.white : AppColors.secondary,
+                    ),
                     onSelected: (_) => setState(() => repeat = rep),
                   );
                 }).toList(),
@@ -129,13 +185,33 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
 
               // End Date
               TextFormField(
+                readOnly: true,
+                controller: TextEditingController(
+                  text: endDate != null
+                      ? '${endDate!.year}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}'
+                      : '', // mostra la data formattata se presente
+                ),
                 decoration: const InputDecoration(
                   labelText: 'End Date (optional)',
-                  hintText: 'YYYY-MM-DD',
+                  hintText: 'Select a date',
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
-                onSaved: (val) => endDate = val != null && val.isNotEmpty
-                    ? DateTime.tryParse(val)
-                    : null,
+                onTap: () async {
+                  // Mostra il calendario quando l’utente clicca sul campo
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: endDate ?? DateTime.now(),
+                    firstDate: DateTime.now(), // non permettere date passate
+                    lastDate: DateTime.now().add(
+                      const Duration(days: 365 * 3),
+                    ), // 3 anni avanti
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      endDate = picked;
+                    });
+                  }
+                },
               ),
               const SizedBox(height: 10),
 
@@ -159,7 +235,26 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     horizontal: 24,
                   ),
                 ),
-                onPressed: _saveMedicine,
+                onPressed: () {
+                  setState(() {
+                    _submitted = true;
+                  });
+                  if (_formKey.currentState!.validate() &&
+                      reminderTimes.isNotEmpty) {
+                    _formKey.currentState!.save();
+                    final med = Medicine(
+                      name: name,
+                      dosage: dosage,
+                      instructions: instructions,
+                      repeat: repeat,
+                      reminderTimes: reminderTimes,
+                      endDate: endDate,
+                      notes: notes,
+                    );
+                    widget.medicineDatabase.addMedicine(med);
+                    Navigator.pop(context);
+                  }
+                },
                 child: const Text(
                   'Save Medication',
                   style: TextStyle(color: Colors.white),
