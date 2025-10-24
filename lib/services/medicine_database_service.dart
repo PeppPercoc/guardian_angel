@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/medicine.dart';
+import 'package:flutter/foundation.dart'; 
+
 
 
 class MedicineDatabase {
@@ -17,6 +19,15 @@ class MedicineDatabase {
   // Aggiunge una nuova medicina
   Future<void> addMedicine(Medicine medicine) async {
     await _box.add(medicine);
+    print('--- Lista Medicine ---');
+  for (var med in _box.values) {
+    print('Nome: ${med.name}');
+    print('Dosaggio: ${med.dosage}');
+    print('Istruzioni: ${med.instructions}');
+    print('Orari: ${med.reminderTimes}');
+    print('Fine: ${med.endDate}');
+    print('----');
+  }
   }
 
   // Recupera tutte le medicine salvate
@@ -36,4 +47,5 @@ class MedicineDatabase {
   Future<void> deleteMedicine(int index) async {
     await _box.deleteAt(index);
   }
+  ValueListenable<Box<Medicine>> get listenable => _box.listenable();
 }
