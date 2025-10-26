@@ -1,44 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:guardian_angel/styles/theme.dart';
+import '../services/medicine_database_service.dart';
+import '../widgets/info_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final MedicineDatabase? medicineDatabase;
+  const HomeScreen({super.key, this.medicineDatabase});
 
-  Future<void> _resetPrefs(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
 
-    if (!context.mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('SharedPreferences resettate con successo!'),
-        backgroundColor: Colors.green,
-      ),
-    );
-    Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
+  String _formattedDate() {
+    final now = DateTime.now();
+    final months = [
+      '',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return '${months[now.month]} ${now.day}, ${now.year}';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (newContext) {
-        return ElevatedButton.icon(
-          icon: const Icon(Icons.restart_alt, color: Colors.white),
-          label: const Text(
-            'Reset SharedPreferences',
-            style: TextStyle(color: Colors.white),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.redAccent,
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+    return SafeArea(
+      bottom: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header info: titolo, data e posizione
+            Text(
+              'Daily Health Overview',
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          onPressed: () => _resetPrefs(newContext),
-        );
-      },
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(Icons.calendar_today, size: 16, color: Colors.black54),
+                const SizedBox(width: 6),
+                Text(
+                  _formattedDate(),
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: const [
+                Icon(Icons.location_on, size: 16, color: Colors.black54),
+                SizedBox(width: 6),
+                Text(
+                  'posizione attuale',
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+    
+            // Lista di card (scrollabile)
+            Expanded(
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  InfoCard(
+                    icon: Icons.wb_sunny,
+                    title: 'prova titolo',
+                    subtitle: 'prova sottotitolo',
+                    backgroundColor: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
