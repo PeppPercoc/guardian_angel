@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:guardian_angel/screens/settings_screen.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
-import 'vitals_screen.dart';
 import 'emergency_screen.dart';
 import '../services/medicine_database_service.dart';
 
@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
    List<Widget> get _pages => [
     SchedulerScreen(medicineDatabase: medicineDatabase),
     HomeScreen(),
-    VitalsScreen(),
+    SettingsScreen(),
   ];
 
   Future<void> showSOSDialog(BuildContext context) async {
@@ -285,7 +285,7 @@ class _MainScreenState extends State<MainScreen> {
             tabs: const [
               GButton(icon: Icons.medication, text: 'Scheduler'),
               GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.favorite, text: 'Vitals'),
+              GButton(icon: Icons.settings, text: 'Settings'),
             ],
             selectedIndex: _selectedIndex,
             onTabChange: (index) {
