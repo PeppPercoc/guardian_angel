@@ -79,7 +79,6 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.wb_sunny,
                     title: 'prova titolo',
                     subtitle: 'prova sottotitolo',
-                    backgroundColor: Colors.white,
                   ),
                   const SizedBox(height: 12),
                   const SizedBox(height: 20),
