@@ -29,6 +29,56 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
         final medicines = widget.medicineDatabase.getAllMedicines();
 
         return Scaffold(
+      body:
+        SafeArea(
+      bottom: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header info: titolo, data e posizione
+            Text(
+              'Medicine Scheduler',
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: MedicineList(
+            medicines: medicines,
+            onDelete: (index) async {
+              await widget.medicineDatabase.deleteMedicine(index);
+            },
+          ),
+            ),
+          ],
+        ),
+      ),
+    ), 
+    floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => AddMedicineForm(
+                  medicineDatabase: widget.medicineDatabase,
+                  onSave: (medicine) async {
+                    await widget.medicineDatabase.addMedicine(medicine);
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pop();
+                  },
+                ),
+              );
+            },
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        );
+         /*  
+        return Scaffold(
           appBar: AppBar(
             title: const Text(
               'Medicine Scheduler',
@@ -61,6 +111,7 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
             child: const Icon(Icons.add, color: Colors.white),
           ),
         );
+        */
       },
     );
   }
