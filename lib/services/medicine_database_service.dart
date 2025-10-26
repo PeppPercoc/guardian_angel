@@ -7,13 +7,32 @@ import 'package:flutter/foundation.dart';
 class MedicineDatabase {
   static const String boxName = 'medicines';
   late Box<Medicine> _box;
+  bool _initialized = false;
 
-  // Inizializza Hive e apre la box (da chiamare all'avvio app)
+  // Singleton
+  static final MedicineDatabase _instance = MedicineDatabase._internal();
+  MedicineDatabase._internal();
+  factory MedicineDatabase() => _instance;
+
+  // Inizializza Hive e apre la box (idempotente)
   Future<void> init() async {
+    if (_initialized) return;
+
+    // Init Flutter (safe ripetere ma meglio non chiamarlo più volte)
     await Hive.initFlutter();
-    Hive.registerAdapter(RepeatAdapter());
-    Hive.registerAdapter(MedicineAdapter());
+
+    // Registra adapter solo se non sono già registrati
+    final repeatAdapter = RepeatAdapter();
+    final medicineAdapter = MedicineAdapter();
+    if (!Hive.isAdapterRegistered(repeatAdapter.typeId)) {
+      Hive.registerAdapter(repeatAdapter);
+    }
+    if (!Hive.isAdapterRegistered(medicineAdapter.typeId)) {
+      Hive.registerAdapter(medicineAdapter);
+    }
+
     _box = await Hive.openBox<Medicine>(boxName);
+    _initialized = true;
   }
 
   // Aggiunge una nuova medicina

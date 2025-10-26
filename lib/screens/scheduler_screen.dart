@@ -43,9 +43,23 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                   itemBuilder: (context, index) {
                     final med = medicines[index];
                     return Card(
-                      child: ListTile(
+                      child:
+                       ListTile(
                         title: Text(med.name),
-                        subtitle: Text('${med.dosage} - ${med.instructions}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${med.dosage} - ${med.instructions}'),
+                            Text('Orari: ${med.reminderTimes.join(', ')}'),
+                            Text(med.endDate != null
+                            ? '${med.endDate?.day}/${med.endDate?.month}/${med.endDate?.year}'
+                            : '---'),
+                            Text(med.notes != null
+                            ? '${med.notes}'
+                            : '---')
+                          ],
+                        ),
+                        
                         leading: const Icon(Icons.medical_services_outlined),
                         trailing: IconButton(
                           icon: Icon(
