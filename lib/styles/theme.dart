@@ -38,8 +38,8 @@ final ThemeData appTheme = ThemeData(
     backgroundColor: Color(0xFFF7F7F7),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    labelStyle: TextStyle(color: AppColors.secondary),
-    hintStyle: TextStyle(color: AppColors.secondary),
+    labelStyle: TextStyle(color: Colors.grey),
+    hintStyle: TextStyle(color: Colors.grey),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
         color: AppColors.secondary,
