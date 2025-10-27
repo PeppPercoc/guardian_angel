@@ -149,9 +149,9 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     ],
                   ),
                   const Divider(
-                    thickness: 1, // spessore linea
-                    color: Colors.grey, // colore linea
-                    height: 20, // spazio tra row e divider
+                    thickness: 1,
+                    color: Colors.grey,
+                    height: 20,
                   ),
                   if (_submitted && reminderTimes.isEmpty)
                     Align(
