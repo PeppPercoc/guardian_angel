@@ -4,6 +4,7 @@ import 'package:guardian_angel/styles/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -19,6 +20,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   void initState() {
     super.initState();
     _loadUserInfo();
+    setMaxBrightness();
   }
 
   Future<void> _loadUserInfo() async {
@@ -47,11 +49,26 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     }
   }
 
+  _callNumber() async {
+    final number = _user?.contactPhone;
+    await FlutterPhoneDirectCaller.callNumber(number!);
+  }
 
-_callNumber() async{
-  final number = _user?.contactPhone;
-  await FlutterPhoneDirectCaller.callNumber(number!);
-}
+  Future<void> setMaxBrightness() async {
+    try {
+      await ScreenBrightness().setApplicationScreenBrightness(1.0);
+    } catch (e) {
+      print('Errore impostando la luminosità: $e');
+    }
+  }
+
+  Future<void> _resetBrightness() async {
+    try {
+      await ScreenBrightness().resetApplicationScreenBrightness();
+    } catch (e) {
+      print('Errore nel resettare luminosità: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +95,17 @@ _callNumber() async{
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 22,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _infoRow(
                         icon: Icons.person,
                         label: 'Full Name',
-                        value:_user != null
+                        value: _user != null
                             ? '${_user!.name} ${_user!.surname}'
                             : '---',
                       ),
@@ -141,8 +160,12 @@ _callNumber() async{
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 6),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 20,
+              top: 6,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -163,7 +186,10 @@ _callNumber() async{
                 ),
                 const SizedBox(height: 14),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () async {
+                    await _resetBrightness();
+                    Navigator.of(context).pop();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
