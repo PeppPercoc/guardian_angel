@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
@@ -45,6 +46,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       });
     }
   }
+
+
+_callNumber() async{
+  final number = _user?.contactPhone;
+  await FlutterPhoneDirectCaller.callNumber(number!);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +147,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    // Azione chiamata emergenza da implementare
-                  },
+                  onPressed: _callNumber,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,

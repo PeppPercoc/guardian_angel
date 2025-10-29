@@ -5,6 +5,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
 import 'main_screen.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -43,7 +44,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<void> _checkIntroSeen() async {
     final prefsService = SharedPrefsService();
     await prefsService.init();
-    final introSeen = await prefsService.getBool('introSeen', defaultValue: false);
+    final introSeen = await prefsService.getBool(
+      'introSeen',
+      defaultValue: false,
+    );
     if (introSeen) {
       if (!mounted) return;
       // se l'intro è già visto, vai subito a MainScreen passando l'istanza inizializzata
@@ -372,13 +376,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   v == null || v.isEmpty ? 'Inserisci nome contatto' : null,
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _contactPhoneController,
-              decoration: const InputDecoration(
-                labelText: 'Telefono contatto emergenza',
+
+            InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                _contactPhoneController.text = number.phoneNumber ?? '';
+              },
+              selectorConfig: SelectorConfig(
+                selectorType: PhoneInputSelectorType.DROPDOWN,
               ),
-              validator: (v) =>
-                  v == null || v.isEmpty ? 'Inserisci telefono' : null,
+              initialValue: PhoneNumber(isoCode: 'IT'),
+              inputDecoration: InputDecoration(
+                labelText: 'Numero di telefono',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Inserisci un numero di telefono';
+                }
+                return null;
+              },
             ),
           ],
         ),
