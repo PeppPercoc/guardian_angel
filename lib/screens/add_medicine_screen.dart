@@ -30,6 +30,21 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
 
   bool _submitted = false;
 
+  // Mostra una stringa leggibile dalle ISO (es. "08:30")
+  String _displayTimeFromIso(String iso) {
+    try {
+      final dt = DateTime.parse(iso);
+      return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    } catch (_) {
+      return iso;
+    }
+  }
+
+  String _displayTimes() {
+    if (reminderTimes.isEmpty) return 'No times chosen';
+    return reminderTimes.map(_displayTimeFromIso).join(', ');
+  }
+
   void _pickTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -37,57 +52,39 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
     );
 
     if (picked != null) {
+      // crea un DateTime "base" sulla data di oggi con ora scelta
+      final now = DateTime.now();
+      final base = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
       setState(() {
-        reminderTimes.clear();
-        reminderTimes.add(_formatTime(picked));
-
-        switch (repeat) {
-          case Repeat.oncePerDay:
-            break;
-
-          case Repeat.twicePerDay:
-            // Ogni 12 ore
-            reminderTimes.add(_addHours(picked, 12));
-            break;
-
-          case Repeat.thricePerDay:
-            // Ogni 8 ore
-            reminderTimes
-              ..add(_addHours(picked, 8))
-              ..add(_addHours(picked, 16));
-            break;
-
-          case Repeat.onceEveryTwoDays:
-            // Solo l'orario, ma ripetuto ogni 48 ore (gestirai in futuro la logica di notifica)
-            break;
-
-          case Repeat.oncePerWeek:
-            // Solo l'orario scelto (gestibile in futuro con giorni della settimana)
-            break;
-        }
+        // calcola e salva come ISO8601 strings
+        reminderTimes = _computeReminderTimesFromBase(base, repeat);
       });
     }
   }
 
-  // Funzione di supporto per aggiungere ore e formattare correttamente
-  String _addHours(TimeOfDay time, int addHours) {
-    final now = DateTime.now();
-    final initial = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      time.hour,
-      time.minute,
-    );
-    final added = initial.add(Duration(hours: addHours));
-
-    // Se supera le 24 ore, torna al formato corretto (es. 00:00)
-    final fixed = TimeOfDay(hour: added.hour % 24, minute: added.minute);
-    return _formatTime(fixed);
+  // Ritorna una ISO8601 string aggiungendo hours a un DateTime
+  String _addHoursIso(DateTime dt, int addHours) {
+    final added = dt.add(Duration(hours: addHours));
+    return added.toIso8601String();
   }
 
-  String _formatTime(TimeOfDay t) =>
-      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+  // Calcola la lista di ISO strings a partire da un DateTime "base"
+  List<String> _computeReminderTimesFromBase(DateTime base, Repeat rep) {
+    final times = <String>[];
+    times.add(base.toIso8601String());
+    switch (rep) {
+      case Repeat.oncePerDay:
+        break;
+      case Repeat.twicePerDay:
+        times.add(_addHoursIso(base, 12));
+        break;
+      case Repeat.thricePerDay:
+        times.add(_addHoursIso(base, 8));
+        times.add(_addHoursIso(base, 16));
+        break;
+    }
+    return times;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,11 +133,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          reminderTimes.isEmpty
-                              ? 'No times chosen'
-                              : reminderTimes.join(', '),
-                        ),
+                        child: Text(_displayTimes()),
                       ),
                       IconButton(
                         icon: const Icon(Icons.access_time),
@@ -177,7 +170,28 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     labelStyle: TextStyle(
                       color: repeat == rep ? Colors.white : AppColors.secondary,
                     ),
-                    onSelected: (_) => setState(() => repeat = rep),
+                    onSelected: (selected) async {
+                      if (!selected) return;
+                      // aggiorna il repeat prima di calcolare i tempi
+                      setState(() {
+                        repeat = rep;
+                      });
+                      // se c'è già almeno un orario scelto, ri-calcola automaticamente
+                      if (reminderTimes.isNotEmpty) {
+                        final base = DateTime.tryParse(reminderTimes.first);
+                        if (base != null) {
+                          setState(() {
+                            reminderTimes = _computeReminderTimesFromBase(base, repeat);
+                          });
+                        } else {
+                          // fallback: richiedi nuovo orario
+                          _pickTime();
+                        }
+                      } else {
+                        // altrimenti chiedi all'utente di scegliere l'orario base
+                        _pickTime();
+                      }
+                    },
                   );
                 }).toList(),
               ),
@@ -276,9 +290,5 @@ String _repeatToString(Repeat r) {
       return "Every 12h";
     case Repeat.thricePerDay:
       return "Every 8h";
-    case Repeat.onceEveryTwoDays:
-      return "Every 2 Days";
-    case Repeat.oncePerWeek:
-      return "Weekly";
   }
 }

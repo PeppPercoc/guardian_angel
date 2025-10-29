@@ -71,10 +71,6 @@ class RepeatAdapter extends TypeAdapter<Repeat> {
         return Repeat.twicePerDay;
       case 2:
         return Repeat.thricePerDay;
-      case 3:
-        return Repeat.onceEveryTwoDays;
-      case 4:
-        return Repeat.oncePerWeek;
       default:
         return Repeat.oncePerDay;
     }
@@ -91,12 +87,6 @@ class RepeatAdapter extends TypeAdapter<Repeat> {
         break;
       case Repeat.thricePerDay:
         writer.writeByte(2);
-        break;
-      case Repeat.onceEveryTwoDays:
-        writer.writeByte(3);
-        break;
-      case Repeat.oncePerWeek:
-        writer.writeByte(4);
         break;
     }
   }

@@ -10,10 +10,6 @@ enum Repeat { // enum per i tipi di ricorrenza
   twicePerDay,
   @HiveField(2)
   thricePerDay,
-  @HiveField(3)
-  onceEveryTwoDays,
-  @HiveField(4)
-  oncePerWeek,
 }
 
 @HiveType(typeId: 8)
