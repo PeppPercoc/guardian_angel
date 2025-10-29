@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/shared_prefs_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
+import 'main_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -33,8 +34,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _medicationsController = TextEditingController();
   final _notesController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _checkIntroSeen();
+  }
+
+  Future<void> _checkIntroSeen() async {
+    final prefsService = SharedPrefsService();
+    await prefsService.init();
+    final introSeen = await prefsService.getBool('introSeen', defaultValue: false);
+    if (introSeen) {
+      if (!mounted) return;
+      // se l'intro è già visto, vai subito a MainScreen passando l'istanza inizializzata
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => MainScreen(sharedPrefsService: prefsService),
+        ),
+      );
+    }
+  }
+
   Future<void> _saveAndContinue() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefsService = SharedPrefsService();
+    await prefsService.init();
     final user = User(
       name: _nameController.text,
       surname: _surnameController.text,
@@ -47,10 +70,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       medications: _medicationsController.text,
       notes: _notesController.text,
     );
-    await prefs.setString('user_data', user.encode());
-    await prefs.setBool('introSeen', true);
+    await prefsService.setString('user_data', user.encode());
+    await prefsService.setBool('introSeen', true);
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed("/main");
+    // Pass the initialized SharedPrefsService instance to MainScreen
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => MainScreen(sharedPrefsService: prefsService),
+      ),
+    );
   }
 
   @override

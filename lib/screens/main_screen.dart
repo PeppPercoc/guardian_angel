@@ -7,9 +7,11 @@ import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import 'emergency_screen.dart';
 import '../services/medicine_database_service.dart';
+import '../services/shared_prefs_service.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final SharedPrefsService? sharedPrefsService;
+  const MainScreen({super.key, this.sharedPrefsService});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -17,19 +19,34 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final MedicineDatabase medicineDatabase = MedicineDatabase();
+  late final SharedPrefsService _prefsService;
+
   int _selectedIndex = 1;
   bool _isDBReady = false;
 
   @override
   void initState() {
     super.initState();
-    _initDatabase();
+    _prefsService = widget.sharedPrefsService ?? SharedPrefsService();
+    _initAll();
   }
 
-   List<Widget> get _pages => [
+  Future<void> _initAll() async {
+      await medicineDatabase.init();
+      await _prefsService.init();
+      if (!mounted) return;
+      setState(() {
+        _isDBReady = true;
+      });
+  }
+
+  List<Widget> get _pages => [
     SchedulerScreen(medicineDatabase: medicineDatabase),
-    HomeScreen(),
-    SettingsScreen(),
+    HomeScreen(medicineDatabase: medicineDatabase),
+    SettingsScreen(
+      medicineDatabase: medicineDatabase,
+      sharedPrefsService: _prefsService,
+    ),
   ];
 
   Future<void> showSOSDialog(BuildContext context) async {
@@ -163,13 +180,6 @@ class _MainScreenState extends State<MainScreen> {
       },
     );
     timer.cancel();
-  }
-
-  Future<void> _initDatabase() async {
-    await medicineDatabase.init();
-    setState(() {
-      _isDBReady = true;
-    });
   }
 
   @override

@@ -1,8 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/medicine.dart';
-import 'package:flutter/foundation.dart'; 
-
-
+import 'package:flutter/foundation.dart';
 
 class MedicineDatabase {
   static const String boxName = 'medicines';
@@ -35,8 +33,34 @@ class MedicineDatabase {
     _initialized = true;
   }
 
+  Future<void> _ensureInit() async {
+    if (!_initialized) await init();
+  }
+
+  /// Cancella tutti i record della box (idempotente).
+  Future<void> clearAll() async {
+    await _ensureInit();
+    if (_box.isOpen) {
+      await _box.clear();
+    } else {
+      // apri temporaneamente e cancella
+      final b = await Hive.openBox<Medicine>(boxName);
+      await b.clear();
+      await b.close();
+    }
+  }
+
+  /// Chiude la box (se aperta).
+  Future<void> close() async {
+    if (_initialized && _box.isOpen) {
+      await _box.close();
+      _initialized = false;
+    }
+  }
+
   // Aggiunge una nuova medicina
   Future<void> addMedicine(Medicine medicine) async {
+    await _ensureInit();
     await _box.add(medicine);
     print('--- Lista Medicine ---');
   for (var med in _box.values) {
@@ -51,6 +75,7 @@ class MedicineDatabase {
 
   // Recupera tutte le medicine salvate
   List<Medicine> getAllMedicines() {
+    if (!_initialized) return <Medicine>[];
     return _box.values.toList();
   }
 

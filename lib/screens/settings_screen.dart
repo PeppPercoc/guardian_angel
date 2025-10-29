@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import '../services/medicine_database_service.dart';
-import '../models/medicine.dart';
+import '../services/shared_prefs_service.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+
+  final MedicineDatabase medicineDatabase;
+  final SharedPrefsService sharedPrefsService;
+  const SettingsScreen({super.key, required this.medicineDatabase, required this.sharedPrefsService});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -28,14 +29,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _clearMedicines() async {
-    // ensure DB initialized
-    await MedicineDatabase().init();
-    if (Hive.isBoxOpen(MedicineDatabase.boxName)) {
-      await Hive.box<Medicine>(MedicineDatabase.boxName).clear();
-    } else {
-      await Hive.openBox<Medicine>(MedicineDatabase.boxName);
-      await Hive.box<Medicine>(MedicineDatabase.boxName).clear();
-    }
+    // usa l'API centralizzata del singleton
+    await widget.medicineDatabase.clearAll();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Medicines cleared')),
@@ -43,8 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _resetAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await widget.sharedPrefsService.clear();
     await _clearMedicines();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
