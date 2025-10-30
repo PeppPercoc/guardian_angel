@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/widgets/info_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
@@ -102,55 +103,55 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.person,
-                        label: 'Full Name',
+                        label: 'Nome Completo',
                         value: _user != null
                             ? '${_user!.name} ${_user!.surname}'
                             : '---',
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.calendar_month,
-                        label: 'Date of Birth',
+                        label: 'Data di nascita',
                         value: _user != null
                             ? '${_user!.dob.day}/${_user!.dob.month}/${_user!.dob.year}'
                             : '---',
                         valueStyle: const TextStyle(color: Colors.green),
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.bloodtype,
-                        label: 'Blood Type',
+                        label: 'ruppo Sanguineo',
                         value: _user != null
                             ? bloodTypeToString(_user!.bloodType)
                             : '---',
                         valueStyle: const TextStyle(color: Colors.red),
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.warning,
-                        label: 'Allergies',
+                        label: 'Allergie',
                         value: _user?.allergies ?? '---',
                         valueStyle: const TextStyle(color: Colors.red),
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.medical_services,
-                        label: 'Medical Conditions',
+                        label: 'Condizioni Mediche',
                         value: _user?.conditions ?? '---',
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.call,
-                        label: 'Emergency Contact',
+                        label: 'Contatto di Emergenza',
                         value:
                             '${_user?.contactName ?? '---'} – ${_user?.contactPhone ?? '---'}',
                         valueStyle: const TextStyle(color: Colors.green),
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.medication,
-                        label: 'Medications',
+                        label: 'Farmaci',
                         value: _user?.medications ?? '---',
                       ),
-                      _infoRow(
+                      InfoRow(
                         icon: Icons.info,
-                        label: 'Additional Notes',
+                        label: 'Note Aggiuntive',
                         value: _user?.notes ?? '---',
                       ),
                     ],
@@ -180,7 +181,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Call Emergency Contact',
+                    'Chiama Contatto di Emergenza',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -199,46 +200,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     ),
                   ),
                   child: const Text(
-                    'End Emergency',
+                    'Termina Emergenza',
                     style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _infoRow({
-    required IconData icon,
-    required String label,
-    required String value,
-    TextStyle valueStyle = const TextStyle(),
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.grey[800]),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: valueStyle.merge(
-                    const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
