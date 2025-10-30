@@ -8,6 +8,20 @@ class MedicineCard extends StatelessWidget {
   final VoidCallback onDelete;
   const MedicineCard({super.key, required this.medicine, required this.index, required this.onDelete});
 
+  String _displayTimeFromIso(String iso) {
+    try {
+      final dt = DateTime.parse(iso);
+      return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    } catch (_) {
+      return iso;
+    }
+  }
+
+  String _displayTimes() {
+    // nessun controllo perchè non può inserire farmaci senza orari
+    return medicine.reminderTimes.map(_displayTimeFromIso).join(', ');
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -42,7 +56,7 @@ class MedicineCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                   Text(
-                    ('Orari: ${medicine.reminderTimes.join(', ')}'),
+                    ('Orari: ${_displayTimes()}'),
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                   Text(
