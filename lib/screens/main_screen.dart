@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:guardian_angel/alerts/sos_alert.dart';
+import 'package:guardian_angel/screens/emergency_screen.dart';
 import 'package:guardian_angel/screens/settings_screen.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
-import 'emergency_screen.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 
@@ -52,21 +53,20 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> showSOSDialog(BuildContext context) async {
     int seconds = 10;
     bool cancelled = false;
-    late StateSetter dialogSetState;
     Timer? timer;
+    late StateSetter dialogSetState;
 
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (!cancelled) {
         if (seconds > 0) {
           dialogSetState(() {
             seconds--;
           });
         } else {
-          timer.cancel();
-          Navigator.of(context).pop();
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+          t.cancel();
+          if (mounted) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+          }
         }
       }
     });
@@ -75,110 +75,31 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            dialogSetState = setState;
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              contentPadding: const EdgeInsets.all(20),
-              title: Row(
-                children: const [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: AppColors.primary,
-                    size: 28,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'Emergency Alert',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'An SOS countdown has started.\nYour emergency contacts will be notified in',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '$seconds',
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const Text(
-                    'seconds unless you cancel.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-              actionsAlignment: MainAxisAlignment.center,
-              actions: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          cancelled = true;
-                          timer?.cancel();
-                          Navigator.of(context).pop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[200],
-                          foregroundColor: Colors.black87,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        icon: const Icon(Icons.close),
-                        label: const Text('Cancel SOS'),
-                      ),
-                      const SizedBox(height: 12),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          cancelled = false;
-                          timer?.cancel();
-                          Navigator.of(context).pop();
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const EmergencyScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        icon: const Icon(Icons.send),
-                        label: const Text('Send Now'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        );
+        return StatefulBuilder(builder: (context, setState) {
+          dialogSetState = setState;
+          return SOSAlertDialog(
+            seconds: seconds,
+            onCancel: () {
+              // aggiorna lo stato locale, ferma timer e chiudi dialog
+              setState(() {
+                cancelled = true;
+              });
+              timer?.cancel();
+              Navigator.of(context).pop();
+            },
+            onSend: () {
+              setState(() {
+                cancelled = false;
+              });
+              timer?.cancel();
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+            },
+          );
+        });
       },
     );
+
     timer.cancel();
   }
 
