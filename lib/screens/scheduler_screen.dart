@@ -37,7 +37,6 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header info: titolo, data e posizione
             Text(
               'Medicine Scheduler',
               style: TextStyle(

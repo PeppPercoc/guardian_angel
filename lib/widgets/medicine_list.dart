@@ -10,7 +10,7 @@ class MedicineList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (medicines.isEmpty) {
-      return const Center(child: Text('No medicines added yet'));
+      return const Center(child: Text('Nessuna medicina inserita.'));
     }
     return ListView.builder(
       itemCount: medicines.length,

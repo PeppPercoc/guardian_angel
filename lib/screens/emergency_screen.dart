@@ -120,7 +120,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                       InfoRow(
                         icon: Icons.bloodtype,
-                        label: 'ruppo Sanguineo',
+                        label: 'Gruppo Sanguineo',
                         value: _user != null
                             ? bloodTypeToString(_user!.bloodType)
                             : '---',
@@ -189,6 +189,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     await _resetBrightness();
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(

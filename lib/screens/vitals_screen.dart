@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class VitalsScreen extends StatelessWidget {
   const VitalsScreen({super.key});
+
   Future<void> _resetPrefs(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -17,7 +18,8 @@ class VitalsScreen extends StatelessWidget {
     );
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
-   @override
+
+  @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (newContext) {
