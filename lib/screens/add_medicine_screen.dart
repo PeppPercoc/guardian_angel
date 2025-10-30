@@ -41,7 +41,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
   }
 
   String _displayTimes() {
-    if (reminderTimes.isEmpty) return 'No times chosen';
+    if (reminderTimes.isEmpty) return 'Nessun orario scelto';
     return reminderTimes.map(_displayTimeFromIso).join(', ');
   }
 
@@ -52,7 +52,6 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
     );
 
     if (picked != null) {
-      // crea un DateTime "base" sulla data di oggi con ora scelta
       final now = DateTime.now();
       final base = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
       setState(() {
@@ -62,13 +61,11 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
     }
   }
 
-  // Ritorna una ISO8601 string aggiungendo hours a un DateTime
   String _addHoursIso(DateTime dt, int addHours) {
     final added = dt.add(Duration(hours: addHours));
     return added.toIso8601String();
   }
 
-  // Calcola la lista di ISO strings a partire da un DateTime "base"
   List<String> _computeReminderTimesFromBase(DateTime base, Repeat rep) {
     final times = <String>[];
     times.add(base.toIso8601String());
@@ -96,33 +93,32 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Medication Name
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Medication Name',
+                  labelText: 'Nome Farmaco',
                   hintText: 'e.g. Aspirin 100mg',
                 ),
                 onSaved: (val) => name = val ?? '',
                 validator: (val) =>
-                    val == null || val.isEmpty ? 'Required' : null,
+                    val == null || val.isEmpty ? 'Inserisci il nome del farmaco' : null,
               ),
               const SizedBox(height: 10),
 
               // Dosage Instructions
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Dosage Instructions',
-                  hintText: 'e.g. 1 pill after lunch',
+                  labelText: 'Istruzioni Dosaggio',
+                  hintText: 'e.g. 1 pillola dopo pranzo',
                 ),
                 onSaved: (val) => dosage = val ?? '',
                 validator: (val) =>
-                    val == null || val.isEmpty ? 'Required' : null,
+                    val == null || val.isEmpty ? 'Inserisci le istruzioni di dosaggio' : null,
               ),
               const SizedBox(height: 10),
 
               // Instructions
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Instructions'),
+                decoration: const InputDecoration(labelText: 'Istruzioni'),
                 onSaved: (val) => instructions = val ?? '',
               ),
               const SizedBox(height: 10),
@@ -150,7 +146,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Required',
+                        'Inserisci un orario',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -158,7 +154,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                 ],
               ),
               // Repeat
-              Align(alignment: Alignment.centerLeft, child: Text('Repeat:')),
+              Align(alignment: Alignment.centerLeft, child: Text('Ripeti:')),
               Wrap(
                 spacing: 8,
                 children: Repeat.values.map((rep) {
@@ -203,22 +199,21 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                 controller: TextEditingController(
                   text: endDate != null
                       ? '${endDate!.year}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}'
-                      : '', // mostra la data formattata se presente
+                      : '',
                 ),
                 decoration: const InputDecoration(
-                  labelText: 'End Date (optional)',
-                  hintText: 'Select a date',
+                  labelText: 'Data di Fine (opzionale)',
+                  hintText: 'Seleziona una data',
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
                 onTap: () async {
-                  // Mostra il calendario quando l’utente clicca sul campo
                   final picked = await showDatePicker(
                     context: context,
                     initialDate: endDate ?? DateTime.now(),
-                    firstDate: DateTime.now(), // non permettere date passate
+                    firstDate: DateTime.now(),
                     lastDate: DateTime.now().add(
                       const Duration(days: 365 * 3),
-                    ), // 3 anni avanti
+                    ), // 3 anni avanti, messo perchè devo metterci qualcosa
                   );
                   if (picked != null) {
                     setState(() {
@@ -232,7 +227,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
               // Notes
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Additional Notes (optional)',
+                  labelText: 'Note Aggiuntive (opzionale)',
                 ),
                 onSaved: (val) => notes = val,
               ),
@@ -270,7 +265,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   }
                 },
                 child: const Text(
-                  'Save Medication',
+                  'Salva Farmaco',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -285,10 +280,10 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
 String _repeatToString(Repeat r) {
   switch (r) {
     case Repeat.oncePerDay:
-      return "Daily";
+      return "Uno al giorno";
     case Repeat.twicePerDay:
-      return "Every 12h";
+      return "Ogni 12h";
     case Repeat.thricePerDay:
-      return "Every 8h";
+      return "Ogni 8h";
   }
 }

@@ -32,7 +32,7 @@ class SOSAlertDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            'An SOS countdown has started.\nYour emergency contacts will be notified in',
+            'Un conto alla rovescia SOS è iniziato.\nI tuoi contatti di emergenza saranno avvisati tra',
             style: TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -43,7 +43,7 @@ class SOSAlertDialog extends StatelessWidget {
               fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary,
             ),
           ),
-          const Text('seconds unless you cancel.', style: TextStyle(fontSize: 16)),
+          const Text('secondi a meno che tu non annulli.', style: TextStyle(fontSize: 16)),
         ],
       ),
       actionsAlignment: MainAxisAlignment.center,
@@ -62,7 +62,7 @@ class SOSAlertDialog extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 icon: const Icon(Icons.close),
-                label: const Text('Cancel SOS'),
+                label: const Text('Annulla SOS'),
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
@@ -74,7 +74,7 @@ class SOSAlertDialog extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 icon: const Icon(Icons.send),
-                label: const Text('Send Now'),
+                label: const Text('Invia Ora'),
               ),
             ],
           ),
