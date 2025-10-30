@@ -44,8 +44,8 @@ dependencies:
   flutter_phone_direct_caller: ^2.2.1
   intl_phone_number_input: ^0.7.5
   screen_brightness: ^2.1.7
-
-
+  geolocator: ^14.0.2
+  geocoding: ^2.0.5
 
 dev_dependencies:
   flutter_test:

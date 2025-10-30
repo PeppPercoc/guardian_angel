@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permessi per la posizione -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!--non usa il GPS, ma utile per  il funz dell'app -->
+
     <application
         android:label="guardian_angel"
         android:name="${applicationName}"
