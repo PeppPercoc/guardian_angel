@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/alerts/generic_alert.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 
 class SettingsScreen extends StatefulWidget {
-
   final MedicineDatabase medicineDatabase;
   final SharedPrefsService sharedPrefsService;
-  const SettingsScreen({super.key, required this.medicineDatabase, required this.sharedPrefsService});
+  const SettingsScreen({
+    super.key,
+    required this.medicineDatabase,
+    required this.sharedPrefsService,
+  });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -33,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await widget.medicineDatabase.clearAll();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Medicines cleared')),
+      const SnackBar(content: Text('Tutte le medicine sono state cancellate')),
     );
   }
 
@@ -41,10 +45,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await widget.sharedPrefsService.clear();
     await _clearMedicines();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('App reset effettuato')),
-    );
-    // go back to welcome flow
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('App reset effettuato')));
+    // torna a WelcomeScreen
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
   }
 
@@ -61,33 +65,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Settings',
-                style: TextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                )),
+            Text(
+              'Settings',
+              style: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 16),
             ListTile(
               leading: const Icon(Icons.person),
-              title: Text('User Profile'),
-              trailing: TextButton(onPressed: () {}, child: const Text('Edit')),
+              title: Text('Profilo Utente'),
+              trailing: TextButton(
+                onPressed: () {},
+                child: const Text('Modifica'),
+              ),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
-              title: const Text('Clear medicines'),
+              leading: const Icon(
+                Icons.delete_forever,
+                color: Colors.redAccent,
+              ),
+              title: const Text('Cancella medicine'),
               subtitle: const Text('Rimuovi tutte le medicine salvate'),
               onTap: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Conferma'),
-                    content: const Text('Vuoi cancellare tutte le medicine?'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.of(context).pop(false),child: const Text('No', style: TextStyle(color: AppColors.secondary),)),
-                      ElevatedButton(onPressed: () => Navigator.of(context).pop(true),style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary), child: const Text('Sì', style: TextStyle(color: Colors.white),)),
-                    ],
+                  builder: (context) => GenericAlert(
+                    title: 'Cancella tutte le medicine',
+                    content:
+                        'Sei sicuro di voler cancellare tutte le medicine? Questa operazione è irreversibile.',
                   ),
                 );
                 if (confirm == true) await _clearMedicines();
@@ -100,13 +109,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Reset app'),
-                    content: const Text('Sei sicuro di voler resettare l\'app? Questa operazione è irreversibile.'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('No', style: TextStyle(color: AppColors.secondary),)),
-                      ElevatedButton(onPressed: () => Navigator.of(context).pop(true), style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary), child: const Text('Sì', style: TextStyle(color: Colors.white),)),
-                    ],
+                  builder: (context) => GenericAlert(
+                    title: 'Reset app',
+                    content:
+                        'Sei sicuro di voler resettare l\'app? Questa operazione è irreversibile.',
                   ),
                 );
                 if (confirm == true) await _resetAll();
