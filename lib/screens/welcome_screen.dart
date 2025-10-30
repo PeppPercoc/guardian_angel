@@ -14,6 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  late final SharedPrefsService sharedPrefsService;
   final PageController _controller = PageController();
   int _pageIndex = 0;
 
@@ -42,26 +43,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future<void> _checkIntroSeen() async {
-    final prefsService = SharedPrefsService();
-    await prefsService.init();
-    final introSeen = await prefsService.getBool(
+    sharedPrefsService = SharedPrefsService();
+    await sharedPrefsService.init();
+    final introSeen = await sharedPrefsService.getBool(
       'introSeen',
       defaultValue: false,
     );
     if (introSeen) {
       if (!mounted) return;
-      // se l'intro è già visto, vai subito a MainScreen passando l'istanza inizializzata
+      // se l'intro è già visto, vai subito a MainScreen
+      // messo qui perchè cosi non lo faccio nel main
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainScreen(sharedPrefsService: prefsService),
+          builder: (_) => MainScreen(sharedPrefsService: sharedPrefsService),
         ),
       );
     }
   }
 
   Future<void> _saveAndContinue() async {
-    final prefsService = SharedPrefsService();
-    await prefsService.init();
+    await sharedPrefsService.init();
     final user = User(
       name: _nameController.text,
       surname: _surnameController.text,
@@ -74,13 +75,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       medications: _medicationsController.text,
       notes: _notesController.text,
     );
-    await prefsService.setString('user_data', user.encode());
-    await prefsService.setBool('introSeen', true);
+    await sharedPrefsService.setString('user_data', user.encode());
+    await sharedPrefsService.setBool('introSeen', true);
     if (!mounted) return;
-    // Pass the initialized SharedPrefsService instance to MainScreen
+    // passo al main screen
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => MainScreen(sharedPrefsService: prefsService),
+        builder: (_) => MainScreen(sharedPrefsService: sharedPrefsService),
       ),
     );
   }
