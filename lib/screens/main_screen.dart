@@ -211,7 +211,7 @@ class _MainScreenState extends State<MainScreen> {
               vertical: 12,
             ),
             duration: const Duration(milliseconds: 400),
-            tabBackgroundColor: AppColors.background,
+            tabBackgroundColor: AppColors.backgroundSecondary,
             color: Colors.grey,
             tabs: const [
               GButton(icon: Icons.medication, text: 'Scheduler'),

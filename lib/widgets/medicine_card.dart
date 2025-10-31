@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/medicine.dart';
-import 'package:guardian_angel/styles/theme.dart';
 
 class MedicineCard extends StatelessWidget {
   final Medicine medicine;
   final int index;
   final VoidCallback onDelete;
-  const MedicineCard({super.key, required this.medicine, required this.index, required this.onDelete});
+  final Color primaryColor;
+  final Color backgroundColor;
+  const MedicineCard({super.key, required this.medicine, required this.index, required this.onDelete, required this.primaryColor, required this.backgroundColor});
 
   String _displayTimeFromIso(String iso) {
     try {
@@ -35,11 +36,11 @@ class MedicineCard extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: backgroundColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               padding: const EdgeInsets.all(10),
-              child: Icon((Icons.medical_services_outlined), color: AppColors.secondary, size: 24),
+              child: Icon((Icons.medical_services_outlined), color: primaryColor, size: 24),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -75,7 +76,7 @@ class MedicineCard extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.delete,
-                color: Colors.green.shade700,
+                color: primaryColor,
               ),
               onPressed: onDelete,
             ),

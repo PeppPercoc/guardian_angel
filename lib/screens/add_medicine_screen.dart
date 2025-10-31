@@ -162,7 +162,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     label: Text(_repeatToString(rep)),
                     selected: repeat == rep,
                     selectedColor: AppColors.secondary,
-                    disabledColor: AppColors.background,
+                    disabledColor: AppColors.backgroundSecondary,
                     labelStyle: TextStyle(
                       color: repeat == rep ? Colors.white : AppColors.secondary,
                     ),
