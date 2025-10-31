@@ -33,7 +33,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _conditionsController = TextEditingController();
   final _contactNameController = TextEditingController();
   final _contactPhoneController = TextEditingController();
-  final _medicationsController = TextEditingController();
   final _notesController = TextEditingController();
 
   @override
@@ -72,7 +71,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       conditions: _conditionsController.text,
       contactName: _contactNameController.text,
       contactPhone: _contactPhoneController.text,
-      medications: _medicationsController.text,
       notes: _notesController.text,
     );
     await sharedPrefsService.setString('user_data', user.encode());
@@ -95,7 +93,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _conditionsController.dispose();
     _contactNameController.dispose();
     _contactPhoneController.dispose();
-    _medicationsController.dispose();
     _notesController.dispose();
     _controller.dispose();
     super.dispose();
@@ -337,11 +334,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci condizioni' : null,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _medicationsController,
-              decoration: const InputDecoration(labelText: 'Farmaci'),
             ),
             const SizedBox(height: 12),
             TextFormField(

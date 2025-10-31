@@ -43,7 +43,6 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           conditions: '---',
           contactName: '---',
           contactPhone: '---',
-          medications: '---',
           notes: '---',
         );
       });
@@ -143,11 +142,6 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         value:
                             '${_user?.contactName ?? '---'} – ${_user?.contactPhone ?? '---'}',
                         valueStyle: const TextStyle(color: Colors.green),
-                      ),
-                      InfoRow(
-                        icon: Icons.medication,
-                        label: 'Farmaci',
-                        value: _user?.medications ?? '---',
                       ),
                       InfoRow(
                         icon: Icons.info,

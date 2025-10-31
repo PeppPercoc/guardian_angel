@@ -10,7 +10,6 @@ class User {
   String conditions;
   String contactName;
   String contactPhone;
-  String medications;
   String notes;
 
   User({
@@ -22,7 +21,6 @@ class User {
     required this.conditions,
     required this.contactName,
     required this.contactPhone,
-    required this.medications,
     required this.notes,
   });
 
@@ -35,7 +33,6 @@ class User {
     'conditions': conditions,
     'contactName': contactName,
     'contactPhone': contactPhone,
-    'medications': medications,
     'notes': notes,
   };
 
@@ -48,7 +45,6 @@ class User {
     conditions: json['conditions'] ?? '',
     contactName: json['contactName'] ?? '',
     contactPhone: json['contactPhone'] ?? '',
-    medications: json['medications'] ?? '',
     notes: json['notes'] ?? '',
   );
 
