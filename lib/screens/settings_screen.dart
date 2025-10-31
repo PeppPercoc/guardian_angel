@@ -83,6 +83,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: () {},
             ),
+                              const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                    height: 20,
+                  ),
             ListTile(
               leading: const Icon(
                 Icons.delete_forever,
@@ -102,6 +107,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (confirm == true) await _clearMedicines();
               },
             ),
+                              const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                    height: 20,
+                  ),
             ListTile(
               leading: const Icon(Icons.restart_alt, color: Colors.orange),
               title: const Text('Reset app'),
