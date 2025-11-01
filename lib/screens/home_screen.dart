@@ -3,11 +3,24 @@ import 'package:guardian_angel/styles/theme.dart';
 import '../services/medicine_database_service.dart';
 import '../widgets/info_card.dart';
 import '../services/location_service.dart';
+import '../services/gemini_service.dart';
 
 class HomeScreen extends StatelessWidget {
   final MedicineDatabase? medicineDatabase;
+  final GeminiService geminiService;
+  late final Future<String?> _geminiFuture;
   final locationService = LocationService();
-  HomeScreen({super.key, this.medicineDatabase});
+
+  HomeScreen({
+    super.key,
+    this.medicineDatabase,
+    required this.geminiService,
+  }) {
+    // crea la Future una sola volta per evitare ripetute chiamate su rebuild
+    _geminiFuture = geminiService.askGemini(
+      'Dammi una breve frase motivazionale per incoraggiare qualcuno a prendersi cura della propria salute. Vorrei come risposta solo la stringa senza ulteriori spiegazioni, emoticon o altro.',
+    );
+  }
 
   String _formattedDate() {
     final now = DateTime.now();
@@ -107,7 +120,28 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'prova sottotitolo',
                   ),
                   const SizedBox(height: 12),
-                  const SizedBox(height: 20),
+                  FutureBuilder<String?>(
+                    future: _geminiFuture,
+                    builder: (context, snapshot) {
+                      // non mostrare la card se è ancora in caricamento, c'è un errore o la risposta è vuota
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const SizedBox.shrink();
+                      }
+                      if (snapshot.hasError) {
+                        return const SizedBox.shrink();
+                      }
+                      final advice = snapshot.data;
+                      if (advice == null || advice.trim().isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return InfoCard(
+                        icon: Icons.smart_toy,
+                        title: "consiglio dell'IA",
+                        subtitle: advice,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
                 ],
               ),
             ),

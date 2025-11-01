@@ -9,6 +9,7 @@ import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
+import '../services/gemini_service.dart';
 
 class MainScreen extends StatefulWidget {
   final SharedPrefsService? sharedPrefsService;
@@ -21,7 +22,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final MedicineDatabase medicineDatabase = MedicineDatabase();
   late final SharedPrefsService _prefsService;
-
+  final GeminiService geminiService = GeminiService();
   int _selectedIndex = 1;
   bool _isDBReady = false;
 
@@ -34,6 +35,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _initAll() async {
       await medicineDatabase.init();
+      // inizializza GeminiService qui (fallirà early se manca la key)
+      await geminiService.init();
       await _prefsService.init();
       if (!mounted) return;
       setState(() {
@@ -43,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> get _pages => [
     SchedulerScreen(medicineDatabase: medicineDatabase),
-    HomeScreen(medicineDatabase: medicineDatabase),
+    HomeScreen(medicineDatabase: medicineDatabase, geminiService: geminiService),
     SettingsScreen(
       medicineDatabase: medicineDatabase,
       sharedPrefsService: _prefsService,
