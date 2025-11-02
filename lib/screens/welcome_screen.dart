@@ -269,7 +269,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               onTap: () async {
                 final pickedDate = await showDatePicker(
                   context: context,
-                  initialDate: _dob ?? DateTime(2000, 1, 1),
+                  initialDate: _dob ?? DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
                 );

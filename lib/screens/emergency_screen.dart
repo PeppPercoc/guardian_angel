@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'package:guardian_angel/widgets/info_row.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/shared_prefs_service.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 class EmergencyScreen extends StatefulWidget {
-  const EmergencyScreen({super.key});
+  final SharedPrefsService? sharedPrefsService;
+  const EmergencyScreen({super.key, this.sharedPrefsService});
 
   @override
   State<EmergencyScreen> createState() => _EmergencyScreenState();
@@ -16,17 +17,18 @@ class EmergencyScreen extends StatefulWidget {
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
   User? _user;
+  late final SharedPrefsService _prefsService;
 
   @override
   void initState() {
     super.initState();
+    _prefsService = widget.sharedPrefsService ?? SharedPrefsService();
     _loadUserInfo();
     setMaxBrightness();
   }
 
   Future<void> _loadUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user_data');
+    final userJson = await _prefsService.getString('user_data');
 
     if (userJson != null) {
       setState(() {

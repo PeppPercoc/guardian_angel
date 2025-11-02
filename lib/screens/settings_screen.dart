@@ -3,6 +3,7 @@ import 'package:guardian_angel/alerts/generic_alert.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
+import 'edit_user_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final MedicineDatabase medicineDatabase;
@@ -78,16 +79,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.person),
               title: Text('Profilo Utente'),
               trailing: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => EditUserScreen(
+                      sharedPrefsService: widget.sharedPrefsService,
+                      onSave: (user) async {
+                        // salva e chiudi il bottom sheet, comportamento identico a scheduler
+                        await widget.sharedPrefsService.setString('user_data', user.encode());
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  );
+                },
                 child: const Text('Modifica'),
               ),
-              onTap: () {},
-            ),
-                              const Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    height: 20,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => EditUserScreen(
+                    sharedPrefsService: widget.sharedPrefsService,
+                    onSave: (user) async {
+                      await widget.sharedPrefsService.setString('user_data', user.encode());
+                      Navigator.of(context).pop();
+                    },
                   ),
+                );
+              },
+            ),
+            const Divider(thickness: 1, color: Colors.grey, height: 20),
             ListTile(
               leading: const Icon(
                 Icons.delete_forever,
@@ -107,11 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (confirm == true) await _clearMedicines();
               },
             ),
-                              const Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    height: 20,
-                  ),
+            const Divider(thickness: 1, color: Colors.grey, height: 20),
             ListTile(
               leading: const Icon(Icons.restart_alt, color: Colors.orange),
               title: const Text('Reset app'),
