@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/services/shared_prefs_service.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import '../services/medicine_database_service.dart';
 import '../widgets/info_card.dart';
@@ -9,14 +10,14 @@ class HomeScreen extends StatelessWidget {
   final MedicineDatabase? medicineDatabase;
   final GeminiService geminiService;
   late final Future<String?> _geminiFuture;
-  final locationService = LocationService();
+  final SharedPrefsService? sharedPrefsService;
+  final locationService = LocationService.instance;
 
   HomeScreen({
     super.key,
     this.medicineDatabase,
-    required this.geminiService,
+    required this.geminiService, required this.sharedPrefsService,
   }) {
-    // crea la Future una sola volta per evitare ripetute chiamate su rebuild
     _geminiFuture = geminiService.askGemini(
       'Dammi una breve frase motivazionale per incoraggiare qualcuno a prendersi cura della propria salute. Vorrei come risposta solo la stringa senza ulteriori spiegazioni, emoticon o altro.',
     );

@@ -2,6 +2,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class LocationService {
+  // singleton
+  LocationService._internal();
+  static final LocationService instance = LocationService._internal();
+  factory LocationService() => instance;
+
   Future<bool> _handlePermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
