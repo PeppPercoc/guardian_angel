@@ -1,26 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/models/blood_type.dart';
 import 'package:guardian_angel/services/shared_prefs_service.dart';
-import 'package:guardian_angel/styles/theme.dart';
+import '../models/user.dart';
+import '../styles/theme.dart';
 import '../services/medicine_database_service.dart';
 import '../widgets/info_card.dart';
 import '../services/location_service.dart';
 import '../services/gemini_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final MedicineDatabase? medicineDatabase;
   final GeminiService geminiService;
-  late final Future<String?> _geminiFuture;
   final SharedPrefsService? sharedPrefsService;
-  final locationService = LocationService.instance;
 
-  HomeScreen({
+  const HomeScreen({
     super.key,
     this.medicineDatabase,
-    required this.geminiService, required this.sharedPrefsService,
-  }) {
-    _geminiFuture = geminiService.askGemini(
-      'Dammi una breve frase motivazionale per incoraggiare qualcuno a prendersi cura della propria salute. Vorrei come risposta solo la stringa senza ulteriori spiegazioni, emoticon o altro.',
-    );
+    required this.geminiService,
+    required this.sharedPrefsService,
+  });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Future<String?> _geminiFuture = Future.value(null);
+  final locationService = LocationService.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo().then((_) => _requestGemini());
+  }
+
+  Future<void> _requestGemini() async {
+    final prompt =
+        '''
+è stato chiesto ad un utente alcune informazioni personali per fornire consigli sanitari personalizzati. Ecco i dati raccolti:
+- Data di nascita: ${_user?.dob}
+- Nome: ${_user?.name}
+- Stato di salute: ${_user?.conditions}
+- Allergie: ${_user?.allergies}
+
+In base a questi dati, dammi un consiglio sulla salute giornaliera utile in massimo 20 parole.
+Fornisci il consiglio in italiano e dammi in output solo il testo del consiglio, senza ulteriori spiegazioni o introduzioni.
+Se pensi che l'utente ha fornito informazioni volgari o non appropriate, rispondi con un consiglio motivazionale senza
+inserire nella risposta i dati dell'utente.
+''';
+    setState(() {
+      _geminiFuture = widget.geminiService.askGemini(prompt);
+    });
+  }
+
+  Future<void> _loadUserInfo() async {
+    final userJson = await widget.sharedPrefsService?.getString('user_data');
+
+    if (userJson != null) {
+      setState(() {
+        _user = User.decode(userJson);
+      });
+    } else {
+      setState(() {
+        _user = User(
+          name: '---',
+          surname: '---',
+          dob: DateTime(1900, 1, 1),
+          bloodType: BloodType.oPositive,
+          allergies: '---',
+          conditions: '---',
+          contactName: '---',
+          contactPhone: '---',
+          notes: '---',
+        );
+      });
+    }
   }
 
   String _formattedDate() {
@@ -89,14 +144,19 @@ class HomeScreen extends StatelessWidget {
                     future: _getPosition(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text('Caricamento posizione...',
-                            style: TextStyle(color: Colors.black54));
+                        return const Text(
+                          'Caricamento posizione...',
+                          style: TextStyle(color: Colors.black54),
+                        );
                       }
                       if (snapshot.hasError) {
-                        return const Text('Errore posizione',
-                            style: TextStyle(color: Colors.black54));
+                        return const Text(
+                          'Errore posizione',
+                          style: TextStyle(color: Colors.black54),
+                        );
                       }
-                      final posText = snapshot.data ?? 'Posizione non disponibile';
+                      final posText =
+                          snapshot.data ?? 'Posizione non disponibile';
                       return Text(
                         posText,
                         style: const TextStyle(color: Colors.black54),

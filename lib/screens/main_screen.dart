@@ -78,6 +78,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(
       medicineDatabase: medicineDatabase,
       geminiService: geminiService,
+      sharedPrefsService: _prefsService,
     ),
     SettingsScreen(
       medicineDatabase: medicineDatabase,
