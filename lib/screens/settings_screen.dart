@@ -79,34 +79,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.person),
               title: Text('Profilo Utente'),
               trailing: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => GenericAlert(
+                      title: 'Modifica Profilo',
+                      content:
+                          'I tuoi dati personali sono importanti per la tua sicurezza.\nAssicurati che le informazioni che stai inserendo siano corrette, in particolare il numero di emergenza.\nVuoi continuare?',
+                    ),
+                  );
+
+                  if (confirm == true && mounted) {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => EditUserScreen(
+                        sharedPrefsService: widget.sharedPrefsService,
+                        onSave: (user) async {
+                          await widget.sharedPrefsService.setString(
+                            'user_data',
+                            user.encode(),
+                          );
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Modifica'),
+              ),
+              onTap: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => GenericAlert(
+                    title: 'Modifica Profilo',
+                    content:
+                        'I tuoi dati personali sono importanti per la tua sicurezza.\nAssicurati che le informazioni che stai inserendo siano corrette, in particolare il numero di emergenza.\nVuoi continuare?',
+                  ),
+                );
+
+                if (confirm == true && mounted) {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
                     builder: (context) => EditUserScreen(
                       sharedPrefsService: widget.sharedPrefsService,
                       onSave: (user) async {
-                        // salva e chiudi il bottom sheet, comportamento identico a scheduler
-                        await widget.sharedPrefsService.setString('user_data', user.encode());
+                        await widget.sharedPrefsService.setString(
+                          'user_data',
+                          user.encode(),
+                        );
                         Navigator.of(context).pop();
                       },
                     ),
                   );
-                },
-                child: const Text('Modifica'),
-              ),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => EditUserScreen(
-                    sharedPrefsService: widget.sharedPrefsService,
-                    onSave: (user) async {
-                      await widget.sharedPrefsService.setString('user_data', user.encode());
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                );
+                }
               },
             ),
             const Divider(thickness: 1, color: AppColors.grey, height: 20),
