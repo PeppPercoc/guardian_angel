@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
       'Ciao, questo è un messaggio',
       _user?.emergencyContactPhone ?? '',
     );
-
+    if (!mounted) return;
     if (success) {
       ScaffoldMessenger.of(
         context,

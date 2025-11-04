@@ -100,6 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             'user_data',
                             user.encode(),
                           );
+                          if (!mounted) return;
                           Navigator.of(context).pop();
                         },
                       ),
