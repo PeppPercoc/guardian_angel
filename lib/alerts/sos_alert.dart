@@ -56,8 +56,8 @@ class SOSAlertDialog extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onCancel,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.black87,
+                  backgroundColor: AppColors.greyLight,
+                  foregroundColor: AppColors.black,
                   padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
@@ -68,8 +68,8 @@ class SOSAlertDialog extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onSend,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.red,
+                  foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),

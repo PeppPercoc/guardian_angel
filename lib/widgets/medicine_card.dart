@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import '../models/medicine.dart';
 
 class MedicineCard extends StatelessWidget {
@@ -26,7 +27,7 @@ class MedicineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 4,
       child: Padding(
@@ -54,21 +55,21 @@ class MedicineCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     ('${medicine.dosageInstructions} - ${medicine.medicineInstructions}'),
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: const TextStyle(fontSize: 14, color: AppColors.black),
                   ),
                   Text(
                     ('Orari: ${_displayTimes()}'),
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: const TextStyle(fontSize: 14, color: AppColors.black),
                   ),
                   Text(
                     (medicine.endDate != null
                 ? '${medicine.endDate?.day}/${medicine.endDate?.month}/${medicine.endDate?.year}'
                 : 'Nessuna data di fine'),
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: const TextStyle(fontSize: 14, color: AppColors.black),
                   ),
                   Text(
                     (medicine.additionalNotes != null ? '${medicine.additionalNotes}' : '---'),
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: const TextStyle(fontSize: 14, color: AppColors.black),
                   ),
                 ],
               ),

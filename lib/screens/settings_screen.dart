@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/alerts/generic_alert.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 import 'edit_user_screen.dart';
@@ -108,11 +109,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               },
             ),
-            const Divider(thickness: 1, color: Colors.grey, height: 20),
+            const Divider(thickness: 1, color: AppColors.grey, height: 20),
             ListTile(
               leading: const Icon(
                 Icons.delete_forever,
-                color: Colors.redAccent,
+                color: AppColors.redAccent,
               ),
               title: const Text('Cancella medicine'),
               subtitle: const Text('Rimuovi tutte le medicine salvate'),
@@ -128,9 +129,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (confirm == true) await _clearMedicines();
               },
             ),
-            const Divider(thickness: 1, color: Colors.grey, height: 20),
+            const Divider(thickness: 1, color: AppColors.grey, height: 20),
             ListTile(
-              leading: const Icon(Icons.restart_alt, color: Colors.orange),
+              leading: const Icon(Icons.restart_alt, color: AppColors.orange),
               title: const Text('Reset app'),
               subtitle: const Text('Cancella tutti dati locali'),
               onTap: () async {

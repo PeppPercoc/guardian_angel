@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import 'package:guardian_angel/widgets/info_row.dart';
 import '../services/shared_prefs_service.dart';
 import '../models/user.dart';
@@ -75,12 +76,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: const Text(
           'EMERGENCY ACTIVE',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.white),
         ),
         centerTitle: true,
         toolbarHeight: 56,
@@ -117,7 +118,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         value: _user != null
                             ? '${_user!.dateOfBirth.day}/${_user!.dateOfBirth.month}/${_user!.dateOfBirth.year}'
                             : '---',
-                        valueStyle: const TextStyle(color: Colors.green),
+                        valueStyle: const TextStyle(color: AppColors.green),
                       ),
                       InfoRow(
                         icon: Icons.bloodtype,
@@ -125,13 +126,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         value: _user != null
                             ? bloodTypeToString(_user!.bloodType)
                             : '---',
-                        valueStyle: const TextStyle(color: Colors.red),
+                        valueStyle: const TextStyle(color: AppColors.red),
                       ),
                       InfoRow(
                         icon: Icons.warning,
                         label: 'Allergie',
                         value: _user?.allergens ?? '---',
-                        valueStyle: const TextStyle(color: Colors.red),
+                        valueStyle: const TextStyle(color: AppColors.red),
                       ),
                       InfoRow(
                         icon: Icons.medical_services,
@@ -143,7 +144,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         label: 'Contatto di Emergenza',
                         value:
                             '${_user?.emergencyContactName ?? '---'} – ${_user?.emergencyContactPhone ?? '---'}',
-                        valueStyle: const TextStyle(color: Colors.green),
+                        valueStyle: const TextStyle(color: AppColors.green),
                       ),
                       InfoRow(
                         icon: Icons.info,
@@ -169,8 +170,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 ElevatedButton(
                   onPressed: _callNumber,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.green,
+                    foregroundColor: AppColors.white,
                     padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -189,8 +190,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
                     padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),

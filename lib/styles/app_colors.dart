@@ -20,5 +20,8 @@ class AppColors {
   static const Color green = Colors.green;
   static const Color orange = Colors.orange;
   static const Color grey = Colors.grey;
+  static const Color greyDark = Color.fromARGB(255, 112, 112, 112);
+  static const Color greyMedium = Color.fromARGB(255, 124, 124, 124);
+  static const Color greyLight = Color.fromARGB(255, 242, 242, 242);
   static const Color black = Colors.black87;
 }

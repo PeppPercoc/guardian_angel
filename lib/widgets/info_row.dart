@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 
 class InfoRow extends StatelessWidget {
     final IconData icon;
@@ -21,7 +22,7 @@ class InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.grey[800]),
+          Icon(icon, color: AppColors.greyDark),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -31,7 +32,7 @@ class InfoRow extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey[600],
+                    color: AppColors.greyMedium,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

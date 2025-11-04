@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/services/medicine_database_service.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/medicine.dart';
 import 'add_medicine_screen.dart';
@@ -72,7 +73,7 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                 ),
               );
             },
-            child: const Icon(Icons.add, color: Colors.white),
+            child: const Icon(Icons.add, color: AppColors.white),
           ),
         );
          /*  

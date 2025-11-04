@@ -3,6 +3,7 @@ import 'package:guardian_angel/models/blood_type.dart';
 import 'package:guardian_angel/models/user.dart';
 import 'package:guardian_angel/services/shared_prefs_service.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 typedef OnSaveCallback = void Function(User user);
@@ -235,7 +236,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 backgroundColor: AppColors.secondary,
               ),
               onPressed: _save,
-              child: const Text('Salva', style: TextStyle(color: Colors.white)),
+              child: const Text('Salva', style: TextStyle(color: AppColors.white)),
             ),
           ],
         ),

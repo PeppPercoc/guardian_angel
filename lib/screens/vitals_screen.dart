@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 
 class VitalsScreen extends StatelessWidget {
   const VitalsScreen({super.key});
@@ -13,7 +14,7 @@ class VitalsScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('SharedPreferences resettate con successo!'),
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.green,
       ),
     );
     Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (route) => false);
@@ -24,13 +25,13 @@ class VitalsScreen extends StatelessWidget {
     return Builder(
       builder: (newContext) {
         return ElevatedButton.icon(
-          icon: const Icon(Icons.restart_alt, color: Colors.white),
+          icon: const Icon(Icons.restart_alt, color: AppColors.white),
           label: const Text(
             'Reset SharedPreferences',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: AppColors.white),
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.redAccent,
+            backgroundColor: AppColors.redAccent,
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

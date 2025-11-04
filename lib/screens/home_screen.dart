@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/models/blood_type.dart';
 import 'package:guardian_angel/services/shared_prefs_service.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import '../models/user.dart';
 import '../styles/theme.dart';
 import '../services/medicine_database_service.dart';
@@ -125,19 +126,19 @@ inserire nella risposta i dati dell'utente.
                 const Icon(
                   Icons.calendar_today,
                   size: 16,
-                  color: Colors.black54,
+                  color: AppColors.black,
                 ),
                 const SizedBox(width: 6),
                 Text(
                   _formattedDate(),
-                  style: const TextStyle(color: Colors.black54),
+                  style: const TextStyle(color: AppColors.black),
                 ),
               ],
             ),
             const SizedBox(height: 6),
             Row(
               children: [
-                const Icon(Icons.location_on, size: 16, color: Colors.black54),
+                const Icon(Icons.location_on, size: 16, color: AppColors.black),
                 const SizedBox(width: 6),
                 Expanded(
                   child: FutureBuilder<String?>(
@@ -146,20 +147,20 @@ inserire nella risposta i dati dell'utente.
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Text(
                           'Caricamento posizione...',
-                          style: TextStyle(color: Colors.black54),
+                          style: TextStyle(color: AppColors.black),
                         );
                       }
                       if (snapshot.hasError) {
                         return const Text(
                           'Posizione non disponibile',
-                          style: TextStyle(color: Colors.black54),
+                          style: TextStyle(color: AppColors.black),
                         );
                       }
                       final posText =
                           snapshot.data ?? 'Posizione non disponibile';
                       return Text(
                         posText,
-                        style: const TextStyle(color: Colors.black54),
+                        style: const TextStyle(color: AppColors.black),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       );

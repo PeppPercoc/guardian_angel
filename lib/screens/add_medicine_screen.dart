@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import '../models/medicine.dart';
 import '../services/medicine_database_service.dart';
 
@@ -139,7 +140,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   ),
                   const Divider(
                     thickness: 1,
-                    color: Colors.grey,
+                    color: AppColors.grey,
                     height: 20,
                   ),
                   if (_submitted && reminderTimes.isEmpty)
@@ -147,7 +148,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Inserisci un orario',
-                        style: TextStyle(color: Colors.red),
+                        style: TextStyle(color: AppColors.red),
                       ),
                     ),
                   const SizedBox(height: 10),
@@ -164,7 +165,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     selectedColor: AppColors.secondary,
                     disabledColor: AppColors.backgroundSecondary,
                     labelStyle: TextStyle(
-                      color: repeat == rep ? Colors.white : AppColors.secondary,
+                      color: repeat == rep ? AppColors.white : AppColors.secondary,
                     ),
                     onSelected: (selected) async {
                       if (!selected) return;
@@ -235,7 +236,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -266,7 +267,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                 },
                 child: const Text(
                   'Salva Farmaco',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: AppColors.white),
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 import '../services/shared_prefs_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/user.dart';
@@ -150,7 +151,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 curve: Curves.easeInOut,
               ),
               style: TextButton.styleFrom(
-                foregroundColor: Colors.grey[700],
+                foregroundColor: AppColors.greyDark,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

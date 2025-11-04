@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/styles/app_colors.dart';
 
 class GenericAlert extends StatelessWidget {
   final String title;
@@ -20,7 +21,7 @@ class GenericAlert extends StatelessWidget {
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
-          child: Text('Sì', style: TextStyle(color: Colors.white)),
+          child: Text('Sì', style: TextStyle(color: AppColors.white)),
         ),
       ],
     );
