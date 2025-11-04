@@ -38,21 +38,21 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       setState(() {
         _user = User(
           name: '---',
-          surname: '---',
-          dob: DateTime(1900, 1, 1),
+          lastName: '---',
+          dateOfBirth: DateTime(1900, 1, 1),
           bloodType: BloodType.oPositive,
-          allergies: '---',
-          conditions: '---',
-          contactName: '---',
-          contactPhone: '---',
-          notes: '---',
+          allergens: '---',
+          medicalConditions: '---',
+          emergencyContactName: '---',
+          emergencyContactPhone: '---',
+          additionalNotes: '---',
         );
       });
     }
   }
 
   _callNumber() async {
-    final number = _user?.contactPhone;
+    final number = _user?.emergencyContactPhone;
     await FlutterPhoneDirectCaller.callNumber(number!);
   }
 
@@ -108,14 +108,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         icon: Icons.person,
                         label: 'Nome Completo',
                         value: _user != null
-                            ? '${_user!.name} ${_user!.surname}'
+                            ? '${_user!.name} ${_user!.lastName}'
                             : '---',
                       ),
                       InfoRow(
                         icon: Icons.calendar_month,
                         label: 'Data di nascita',
                         value: _user != null
-                            ? '${_user!.dob.day}/${_user!.dob.month}/${_user!.dob.year}'
+                            ? '${_user!.dateOfBirth.day}/${_user!.dateOfBirth.month}/${_user!.dateOfBirth.year}'
                             : '---',
                         valueStyle: const TextStyle(color: Colors.green),
                       ),
@@ -130,25 +130,25 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       InfoRow(
                         icon: Icons.warning,
                         label: 'Allergie',
-                        value: _user?.allergies ?? '---',
+                        value: _user?.allergens ?? '---',
                         valueStyle: const TextStyle(color: Colors.red),
                       ),
                       InfoRow(
                         icon: Icons.medical_services,
                         label: 'Condizioni Mediche',
-                        value: _user?.conditions ?? '---',
+                        value: _user?.medicalConditions ?? '---',
                       ),
                       InfoRow(
                         icon: Icons.call,
                         label: 'Contatto di Emergenza',
                         value:
-                            '${_user?.contactName ?? '---'} – ${_user?.contactPhone ?? '---'}',
+                            '${_user?.emergencyContactName ?? '---'} – ${_user?.emergencyContactPhone ?? '---'}',
                         valueStyle: const TextStyle(color: Colors.green),
                       ),
                       InfoRow(
                         icon: Icons.info,
                         label: 'Note Aggiuntive',
-                        value: _user?.notes ?? '---',
+                        value: _user?.additionalNotes ?? '---',
                       ),
                     ],
                   ),

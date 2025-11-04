@@ -21,12 +21,12 @@ class AddMedicineForm extends StatefulWidget {
 class _AddMedicineFormState extends State<AddMedicineForm> {
   final _formKey = GlobalKey<FormState>();
   String name = '';
-  String dosage = '';
-  String instructions = '';
+  String dosageInstructions = '';
+  String medicineInstructions = '';
   Repeat repeat = Repeat.oncePerDay;
   List<String> reminderTimes = [];
   DateTime? endDate;
-  String? notes;
+  String? additionalNotes;
 
   bool _submitted = false;
 
@@ -110,7 +110,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   labelText: 'Istruzioni Dosaggio',
                   hintText: 'e.g. 1 pillola dopo pranzo',
                 ),
-                onSaved: (val) => dosage = val ?? '',
+                onSaved: (val) => dosageInstructions = val ?? '',
                 validator: (val) =>
                     val == null || val.isEmpty ? 'Inserisci le istruzioni di dosaggio' : null,
               ),
@@ -119,7 +119,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
               // Instructions
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Istruzioni'),
-                onSaved: (val) => instructions = val ?? '',
+                onSaved: (val) => medicineInstructions = val ?? '',
               ),
               const SizedBox(height: 10),
 
@@ -229,7 +229,7 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                 decoration: const InputDecoration(
                   labelText: 'Note Aggiuntive (opzionale)',
                 ),
-                onSaved: (val) => notes = val,
+                onSaved: (val) => additionalNotes = val,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -253,12 +253,12 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     _formKey.currentState!.save();
                     final med = Medicine(
                       name: name,
-                      dosage: dosage,
-                      instructions: instructions,
+                      dosageInstructions: dosageInstructions,
+                      medicineInstructions: medicineInstructions,
                       repeat: repeat,
                       reminderTimes: reminderTimes,
                       endDate: endDate,
-                      notes: notes,
+                      additionalNotes: additionalNotes,
                     );
                     widget.medicineDatabase.addMedicine(med);
                     Navigator.pop(context);

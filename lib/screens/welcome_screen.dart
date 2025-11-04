@@ -25,15 +25,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   // Controller dei campi
   final _nameController = TextEditingController();
-  final _surnameController = TextEditingController();
-  final _dobController = TextEditingController();
-  DateTime? _dob;
+  final _lastNameController = TextEditingController();
+  final _dateOfBirthController = TextEditingController();
+  DateTime? _dateOfBirth;
   BloodType _selectedBloodType = BloodType.oPositive;
-  final _allergiesController = TextEditingController();
-  final _conditionsController = TextEditingController();
-  final _contactNameController = TextEditingController();
-  final _contactPhoneController = TextEditingController();
-  final _notesController = TextEditingController();
+  final _allergensController = TextEditingController();
+  final _medicalConditionsController = TextEditingController();
+  final _emergencyContactNameController = TextEditingController();
+  final _emergencyContactPhoneController = TextEditingController();
+  final _additionalNotesController = TextEditingController();
 
   @override
   void initState() {
@@ -64,14 +64,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     await sharedPrefsService.init();
     final user = User(
       name: _nameController.text,
-      surname: _surnameController.text,
-      dob: _dob ?? DateTime(2000, 1, 1),
+      lastName: _lastNameController.text,
+      dateOfBirth: _dateOfBirth ?? DateTime(2000, 1, 1),
       bloodType: _selectedBloodType,
-      allergies: _allergiesController.text,
-      conditions: _conditionsController.text,
-      contactName: _contactNameController.text,
-      contactPhone: _contactPhoneController.text,
-      notes: _notesController.text,
+      allergens: _allergensController.text,
+      medicalConditions: _medicalConditionsController.text,
+      emergencyContactName: _emergencyContactNameController.text,
+      emergencyContactPhone: _emergencyContactPhoneController.text,
+      additionalNotes: _additionalNotesController.text,
     );
     await sharedPrefsService.setString('user_data', user.encode());
     await sharedPrefsService.setBool('introSeen', true);
@@ -87,13 +87,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _surnameController.dispose();
-    _dobController.dispose();
-    _allergiesController.dispose();
-    _conditionsController.dispose();
-    _contactNameController.dispose();
-    _contactPhoneController.dispose();
-    _notesController.dispose();
+    _lastNameController.dispose();
+    _dateOfBirthController.dispose();
+    _allergensController.dispose();
+    _medicalConditionsController.dispose();
+    _emergencyContactNameController.dispose();
+    _emergencyContactPhoneController.dispose();
+    _additionalNotesController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -250,7 +250,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             const SizedBox(height: 12),
             TextFormField(
-              controller: _surnameController,
+              controller: _lastNameController,
               decoration: const InputDecoration(labelText: 'Cognome'),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci il cognome' : null,
@@ -258,26 +258,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const SizedBox(height: 12),
             TextFormField(
               readOnly: true,
-              controller: _dobController,
+              controller: _dateOfBirthController,
               decoration: const InputDecoration(
                 labelText: 'Data di nascita',
                 hintText: 'Seleziona una data',
                 suffixIcon: Icon(Icons.calendar_today),
               ),
               validator: (_) =>
-                  _dob == null ? 'Inserisci la data di nascita' : null,
+                  _dateOfBirth == null ? 'Inserisci la data di nascita' : null,
               onTap: () async {
                 final pickedDate = await showDatePicker(
                   context: context,
-                  initialDate: _dob ?? DateTime.now(),
+                  initialDate: _dateOfBirth ?? DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
                 );
 
                 if (pickedDate != null) {
                   setState(() {
-                    _dob = pickedDate;
-                    _dobController.text =
+                    _dateOfBirth = pickedDate;
+                    _dateOfBirthController.text =
                         '${pickedDate.day.toString().padLeft(2, '0')}/'
                         '${pickedDate.month.toString().padLeft(2, '0')}/'
                         '${pickedDate.year}';
@@ -321,14 +321,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _allergiesController,
+              controller: _allergensController,
               decoration: const InputDecoration(labelText: 'Allergie'),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci allergie' : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
-              controller: _conditionsController,
+              controller: _medicalConditionsController,
               decoration: const InputDecoration(
                 labelText: 'Condizioni mediche',
               ),
@@ -337,7 +337,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             const SizedBox(height: 12),
             TextFormField(
-              controller: _notesController,
+              controller: _additionalNotesController,
               decoration: const InputDecoration(labelText: 'Note aggiuntive'),
             ),
           ],
@@ -361,7 +361,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: _contactNameController,
+              controller: _emergencyContactNameController,
               decoration: const InputDecoration(
                 labelText: 'Nome contatto emergenza',
               ),
@@ -372,7 +372,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
             InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
-                _contactPhoneController.text = number.phoneNumber ?? '';
+                _emergencyContactPhoneController.text = number.phoneNumber ?? '';
               },
               selectorConfig: SelectorConfig(
                 selectorType: PhoneInputSelectorType.DROPDOWN,

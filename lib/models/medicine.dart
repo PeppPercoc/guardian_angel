@@ -18,10 +18,10 @@ class Medicine extends HiveObject {
   String name;
 
   @HiveField(1)
-  String dosage;
+  String dosageInstructions;
 
   @HiveField(2)
-  String instructions;
+  String medicineInstructions;
 
   @HiveField(3)
   Repeat repeat;
@@ -33,15 +33,15 @@ class Medicine extends HiveObject {
   DateTime? endDate;
 
   @HiveField(6)
-  String? notes;
+  String? additionalNotes;
 
   Medicine({
     required this.name,
-    required this.dosage,
-    required this.instructions,
+    required this.dosageInstructions,
+    required this.medicineInstructions,
     required this.repeat,
     required this.reminderTimes,
     this.endDate,
-    this.notes,
+    this.additionalNotes,
   });
 }

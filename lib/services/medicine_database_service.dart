@@ -62,29 +62,12 @@ class MedicineDatabase {
   Future<void> addMedicine(Medicine medicine) async {
     await _ensureInit();
     await _box.add(medicine);
-    print('--- Lista Medicine ---');
-  for (var med in _box.values) {
-    print('Nome: ${med.name}');
-    print('Dosaggio: ${med.dosage}');
-    print('Istruzioni: ${med.instructions}');
-    print('Orari: ${med.reminderTimes}');
-    print('Fine: ${med.endDate}');
-    print('----');
-  }
   }
 
-  // Recupera tutte le medicine salvate
+  // Stampa tutte le medicine
   List<Medicine> getAllMedicines() {
     if (!_initialized) return <Medicine>[];
     return _box.values.toList();
-  }
-
-  // Esempio di query: recupera medicine il cui nome contiene una stringa (case insensitive)
-  List<Medicine> queryMedicinesByName(String namePart) {
-    final nameLower = namePart.toLowerCase();
-    return _box.values
-        .where((med) => med.name.toLowerCase().contains(nameLower))
-        .toList();
   }
 
   // Elimina una medicina per indice

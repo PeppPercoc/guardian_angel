@@ -15,33 +15,32 @@ class EditUserScreen extends StatefulWidget {
   @override
   State<EditUserScreen> createState() => _EditUserScreenState();
 }
-
 class _EditUserScreenState extends State<EditUserScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = true;
 
   late TextEditingController _nameController;
-  late TextEditingController _surnameController;
-  late TextEditingController _dobController;
-  DateTime? _dob;
+  late TextEditingController _lastNameController;
+  late TextEditingController _dateOfBirthController;
+  DateTime? _dateOfBirth;
   BloodType _bloodType = BloodType.oPositive;
-  late TextEditingController _allergiesController;
-  late TextEditingController _conditionsController;
-  late TextEditingController _contactNameController;
-  late TextEditingController _contactPhoneController;
-  late TextEditingController _notesController;
+  late TextEditingController _allergensController;
+  late TextEditingController _medicalConditionsController;
+  late TextEditingController _emergencyContactNameController;
+  late TextEditingController _emergencyContactPhoneController;
+  late TextEditingController _additionalNotesController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
-    _surnameController = TextEditingController();
-    _dobController = TextEditingController();
-    _allergiesController = TextEditingController();
-    _conditionsController = TextEditingController();
-    _contactNameController = TextEditingController();
-    _contactPhoneController = TextEditingController();
-    _notesController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _dateOfBirthController = TextEditingController();
+    _allergensController = TextEditingController();
+    _medicalConditionsController = TextEditingController();
+    _emergencyContactNameController = TextEditingController();
+    _emergencyContactPhoneController = TextEditingController();
+    _additionalNotesController = TextEditingController();
     _loadUser();
   }
 
@@ -52,20 +51,20 @@ class _EditUserScreenState extends State<EditUserScreen> {
       if (json != null) {
         final user = User.decode(json);
         _nameController.text = user.name;
-        _surnameController.text = user.surname;
-        _dob = user.dob;
-        if (_dob != null) {
-          _dobController.text =
-              '${_dob!.day.toString().padLeft(2, '0')}/'
-              '${_dob!.month.toString().padLeft(2, '0')}/'
-              '${_dob!.year}';
+        _lastNameController.text = user.lastName;
+        _dateOfBirth = user.dateOfBirth;
+        if (_dateOfBirth != null) {
+          _dateOfBirthController.text =
+              '${_dateOfBirth!.day.toString().padLeft(2, '0')}/'
+              '${_dateOfBirth!.month.toString().padLeft(2, '0')}/'
+              '${_dateOfBirth!.year}';
         }
         _bloodType = user.bloodType;
-        _allergiesController.text = user.allergies;
-        _conditionsController.text = user.conditions;
-        _contactNameController.text = user.contactName;
-        _contactPhoneController.text = user.contactPhone;
-        _notesController.text = user.notes;
+        _allergensController.text = user.allergens;
+        _medicalConditionsController.text = user.medicalConditions;
+        _emergencyContactNameController.text = user.emergencyContactName;
+        _emergencyContactPhoneController.text = user.emergencyContactPhone;
+        _additionalNotesController.text = user.additionalNotes;
       }
     } catch (e) {
       debugPrint('Errore caricamento user: $e');
@@ -74,19 +73,18 @@ class _EditUserScreenState extends State<EditUserScreen> {
     }
   }
 
-
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final user = User(
       name: _nameController.text.trim(),
-      surname: _surnameController.text.trim(),
-      dob: _dob ?? DateTime(1990, 1, 1),
+      lastName: _lastNameController.text.trim(),
+      dateOfBirth: _dateOfBirth ?? DateTime(1990, 1, 1),
       bloodType: _bloodType,
-      allergies: _allergiesController.text.trim(),
-      conditions: _conditionsController.text.trim(),
-      contactName: _contactNameController.text.trim(),
-      contactPhone: _contactPhoneController.text.trim(),
-      notes: _notesController.text.trim(),
+      allergens: _allergensController.text.trim(),
+      medicalConditions: _medicalConditionsController.text.trim(),
+      emergencyContactName: _emergencyContactNameController.text.trim(),
+      emergencyContactPhone: _emergencyContactPhoneController.text.trim(),
+      additionalNotes: _additionalNotesController.text.trim(),
     );
 
     try {
@@ -109,13 +107,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _surnameController.dispose();
-    _dobController.dispose();
-    _allergiesController.dispose();
-    _conditionsController.dispose();
-    _contactNameController.dispose();
-    _contactPhoneController.dispose();
-    _notesController.dispose();
+    _lastNameController.dispose();
+    _dateOfBirthController.dispose();
+    _allergensController.dispose();
+    _medicalConditionsController.dispose();
+    _emergencyContactNameController.dispose();
+    _emergencyContactPhoneController.dispose();
+    _additionalNotesController.dispose();
     super.dispose();
   }
 
@@ -136,7 +134,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
             const SizedBox(height: 10),
             TextFormField(
-              controller: _surnameController,
+              controller: _lastNameController,
               decoration: const InputDecoration(labelText: 'Cognome'),
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Inserisci il cognome' : null,
@@ -144,25 +142,25 @@ class _EditUserScreenState extends State<EditUserScreen> {
             const SizedBox(height: 10),
            TextFormField(
               readOnly: true,
-              controller: _dobController,
+              controller: _dateOfBirthController,
               decoration: const InputDecoration(
                 labelText: 'Data di nascita',
                 suffixIcon: Icon(Icons.calendar_today),
               ),
               validator: (_) =>
-                  _dob == null ? 'Inserisci la data di nascita' : null,
+                  _dateOfBirth == null ? 'Inserisci la data di nascita' : null,
               onTap: () async {
                 final pickedDate = await showDatePicker(
                   context: context,
-                  initialDate: _dob ?? DateTime.now(),
+                  initialDate: _dateOfBirth ?? DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
                 );
 
                 if (pickedDate != null) {
                   setState(() {
-                    _dob = pickedDate;
-                    _dobController.text =
+                    _dateOfBirth = pickedDate;
+                    _dateOfBirthController.text =
                         '${pickedDate.day.toString().padLeft(2, '0')}/'
                         '${pickedDate.month.toString().padLeft(2, '0')}/'
                         '${pickedDate.year}';
@@ -186,14 +184,14 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
             const SizedBox(height: 10),
             TextFormField(
-              controller: _allergiesController,
+              controller: _allergensController,
               decoration: const InputDecoration(labelText: 'Allergie'),
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Inserisci allergie' : null,
             ),
             const SizedBox(height: 10),
             TextFormField(
-              controller: _conditionsController,
+              controller: _medicalConditionsController,
               decoration: const InputDecoration(
                 labelText: 'Condizioni mediche',
               ),
@@ -202,11 +200,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
             const SizedBox(height: 10),
             TextFormField(
-              controller: _notesController,
+              controller: _additionalNotesController,
               decoration: const InputDecoration(labelText: 'Note'),
             ),
             TextFormField(
-              controller: _contactNameController,
+              controller: _emergencyContactNameController,
               decoration: const InputDecoration(
                 labelText: 'Nome contatto di emergenza',
               ),
@@ -214,12 +212,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
             const SizedBox(height: 10),
             InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
-                _contactPhoneController.text = number.phoneNumber ?? '';
+                _emergencyContactPhoneController.text = number.phoneNumber ?? '';
               },
               selectorConfig: SelectorConfig(
                 selectorType: PhoneInputSelectorType.DROPDOWN,
               ),
-              initialValue: PhoneNumber(isoCode: 'IT', phoneNumber: _contactPhoneController.text),
+              initialValue: PhoneNumber(isoCode: 'IT', phoneNumber: _emergencyContactPhoneController.text),
               inputDecoration: InputDecoration(
                 labelText: 'Numero di telefono',
                 border: OutlineInputBorder(),

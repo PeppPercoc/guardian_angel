@@ -18,12 +18,12 @@ class MedicineAdapter extends TypeAdapter<Medicine> {
     };
     return Medicine(
       name: fields[0] as String,
-      dosage: fields[1] as String,
-      instructions: fields[2] as String,
+      dosageInstructions: fields[1] as String,
+      medicineInstructions: fields[2] as String,
       repeat: fields[3] as Repeat,
       reminderTimes: (fields[4] as List).cast<String>(),
       endDate: fields[5] as DateTime?,
-      notes: fields[6] as String?,
+      additionalNotes: fields[6] as String?,
     );
   }
 
@@ -34,9 +34,9 @@ class MedicineAdapter extends TypeAdapter<Medicine> {
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.dosage)
+      ..write(obj.dosageInstructions)
       ..writeByte(2)
-      ..write(obj.instructions)
+      ..write(obj.medicineInstructions)
       ..writeByte(3)
       ..write(obj.repeat)
       ..writeByte(4)
@@ -44,7 +44,7 @@ class MedicineAdapter extends TypeAdapter<Medicine> {
       ..writeByte(5)
       ..write(obj.endDate)
       ..writeByte(6)
-      ..write(obj.notes);
+      ..write(obj.additionalNotes);
   }
 
   @override

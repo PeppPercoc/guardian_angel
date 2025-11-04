@@ -39,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final prompt =
         '''
 è stato chiesto ad un utente alcune informazioni personali per fornire consigli sanitari personalizzati. Ecco i dati raccolti:
-- Data di nascita: ${_user?.dob}
+- Data di nascita: ${_user?.dateOfBirth}
 - Nome: ${_user?.name}
-- Stato di salute: ${_user?.conditions}
-- Allergie: ${_user?.allergies}
+- Stato di salute: ${_user?.medicalConditions}
+- Allergie: ${_user?.allergens}
 
 In base a questi dati, dammi un consiglio sulla salute giornaliera utile in massimo 20 parole.
 Fornisci il consiglio in italiano e dammi in output solo il testo del consiglio, senza ulteriori spiegazioni o introduzioni.
@@ -65,14 +65,14 @@ inserire nella risposta i dati dell'utente.
       setState(() {
         _user = User(
           name: '---',
-          surname: '---',
-          dob: DateTime(1900, 1, 1),
+          lastName: '---',
+          dateOfBirth: DateTime(1900, 1, 1),
           bloodType: BloodType.oPositive,
-          allergies: '---',
-          conditions: '---',
-          contactName: '---',
-          contactPhone: '---',
-          notes: '---',
+          allergens: '---',
+          medicalConditions: '---',
+          emergencyContactName: '---',
+          emergencyContactPhone: '---',
+          additionalNotes: '---',
         );
       });
     }

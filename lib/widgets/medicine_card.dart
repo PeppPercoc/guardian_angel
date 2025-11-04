@@ -53,7 +53,7 @@ class MedicineCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    ('${medicine.dosage} - ${medicine.instructions}'),
+                    ('${medicine.dosageInstructions} - ${medicine.medicineInstructions}'),
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                   Text(
@@ -67,7 +67,7 @@ class MedicineCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                   Text(
-                    (medicine.notes != null ? '${medicine.notes}' : '---'),
+                    (medicine.additionalNotes != null ? '${medicine.additionalNotes}' : '---'),
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
