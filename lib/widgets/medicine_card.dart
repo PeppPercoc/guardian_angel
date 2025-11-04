@@ -53,10 +53,16 @@ class MedicineCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    ('${medicine.dosageInstructions} - ${medicine.medicineInstructions}'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.black),
-                  ),
+                  if (medicine.medicineInstructions.isEmpty)
+                    Text(
+                      medicine.dosageInstructions,
+                      style: const TextStyle(fontSize: 14, color: AppColors.black),
+                    )
+                  else
+                    Text(
+                      '${medicine.dosageInstructions} - ${medicine.medicineInstructions}',
+                      style: const TextStyle(fontSize: 14, color: AppColors.black),
+                    ),
                   Text(
                     ('Orari: ${_displayTimes()}'),
                     style: const TextStyle(fontSize: 14, color: AppColors.black),
