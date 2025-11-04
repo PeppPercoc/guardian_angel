@@ -25,9 +25,20 @@ class LocationService {
     bool hasPermission = await _handlePermission();
     if (!hasPermission) return null;
 
-    return await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
-    );
+    try {
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 0,
+          timeLimit: Duration(seconds: 30),
+        ),
+        forceAndroidLocationManager: true,
+      );
+      return position;
+    } catch (e) {
+        return null;
+
+    }
   }
 
   Future<String?> getCurrentPositionString() async {

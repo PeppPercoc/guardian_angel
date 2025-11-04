@@ -151,7 +151,7 @@ inserire nella risposta i dati dell'utente.
                       }
                       if (snapshot.hasError) {
                         return const Text(
-                          'Errore posizione',
+                          'Posizione non disponibile',
                           style: TextStyle(color: Colors.black54),
                         );
                       }
