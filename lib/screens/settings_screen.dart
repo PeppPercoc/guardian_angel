@@ -5,6 +5,7 @@ import 'package:guardian_angel/styles/app_colors.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 import 'edit_user_screen.dart';
+import 'package:guardian_angel/widgets/loading_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final MedicineDatabase medicineDatabase;
@@ -56,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const LoadingScreen();
     }
 
     return SafeArea(

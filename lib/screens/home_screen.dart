@@ -8,6 +8,7 @@ import '../services/medicine_database_service.dart';
 import '../widgets/info_card.dart';
 import '../services/location_service.dart';
 import '../services/gemini_service.dart';
+import 'package:guardian_angel/widgets/loading_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final MedicineDatabase? medicineDatabase;
@@ -108,6 +109,11 @@ inserire nella risposta i dati dell'utente.
 
   @override
   Widget build(BuildContext context) {
+    // Mostra loading screen finché non carica l'utente
+    if (_user == null) {
+      return const LoadingScreen();
+    }
+
     return SafeArea(
       bottom: true,
       child: Padding(

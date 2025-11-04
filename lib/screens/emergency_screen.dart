@@ -7,6 +7,7 @@ import '../services/shared_prefs_service.dart';
 import '../models/user.dart';
 import '../models/blood_type.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:guardian_angel/widgets/loading_screen.dart';
 
 class EmergencyScreen extends StatefulWidget {
   final SharedPrefsService? sharedPrefsService;
@@ -75,6 +76,11 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mostra loading screen finché non carica l'utente
+    if (_user == null) {
+      return const LoadingScreen();
+    }
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(

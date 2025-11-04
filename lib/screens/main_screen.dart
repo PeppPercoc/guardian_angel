@@ -13,6 +13,7 @@ import 'scheduler_screen.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 import '../services/gemini_service.dart';
+import 'package:guardian_angel/widgets/loading_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final SharedPrefsService sharedPrefsService;
@@ -162,7 +163,7 @@ Indirizzo: $positionAddress
   @override
   Widget build(BuildContext context) {
     if (!_isDBReady) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const LoadingScreen();
     }
     double screenWidth = MediaQuery.of(context).size.width;
 

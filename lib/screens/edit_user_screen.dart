@@ -5,6 +5,7 @@ import 'package:guardian_angel/services/shared_prefs_service.dart';
 import 'package:guardian_angel/styles/theme.dart';
 import 'package:guardian_angel/styles/app_colors.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:guardian_angel/widgets/loading_screen.dart';
 
 typedef OnSaveCallback = void Function(User user);
 
@@ -120,7 +121,9 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_loading) {
+      return const LoadingScreen();
+    }
     return SingleChildScrollView(
       padding: EdgeInsets.only(bottom: 50, left: 16, right: 16, top: 16),
       child: Form(
