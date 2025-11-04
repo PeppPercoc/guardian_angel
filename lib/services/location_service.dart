@@ -49,14 +49,26 @@ class LocationService {
     Position? pos = await getCurrentPosition();
     if (pos == null) {
       return "Permesso negato o nessuna posizione trovata.";
-    } else {
-      List<Placemark> placemarks = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    }
+    
+    try {
+      final placemarks = await placemarkFromCoordinates(
+        pos.latitude, 
+        pos.longitude,
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => [],
+      );
+      
       if (placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
+        final place = placemarks[0];
         return '${place.street}, ${place.locality}, ${place.country}';
       } else {
         return 'Posizione non trovata';
       }
+    } catch (e) {
+      // Fallback: ritorna solo lat/long se geocoding fallisce
+      return 'Lat: ${pos.latitude.toStringAsFixed(6)}, Long: ${pos.longitude.toStringAsFixed(6)}';
     }
   }
 
@@ -64,13 +76,7 @@ class LocationService {
     Position? pos = await getCurrentPosition();
     if (pos == null) {
       return "Permesso negato o nessuna posizione trovata.";
-    } else {
-      List<Placemark> placemarks = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-      if (placemarks.isNotEmpty) {
-        return 'Lat: ${pos.latitude}, Long: ${pos.longitude}';
-      } else {
-        return 'Posizione non trovata';
-      }
     }
+    return 'Lat: ${pos.latitude.toStringAsFixed(6)}, Long: ${pos.longitude.toStringAsFixed(6)}';
   }
 }
