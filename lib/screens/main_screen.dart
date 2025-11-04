@@ -39,16 +39,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _loadUserInfo() async {
-
-      final userJson = await _prefsService.getString('user_data');
-      if (userJson != null) {
-        setState(() {
-          _user = User.decode(userJson);
-        });
-        return;
-      }
-    
+    final userJson = await _prefsService.getString('user_data');
+    if (userJson != null) {
+      setState(() {
+        _user = User.decode(userJson);
+      });
+      return;
+    }
   }
+
   Future<void> sendMessage() async {
     bool success = await smsService.sendSms(
       'Ciao, questo è un messaggio',
@@ -56,9 +55,13 @@ class _MainScreenState extends State<MainScreen> {
     );
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('SMS inviato')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('SMS inviato')));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invio SMS fallito')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invio SMS fallito')));
     }
   }
 
@@ -106,9 +109,9 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.of(context).pop();
             // dopo aver chiuso il dialog, mandiamo il messaggio e andiamo in emergency
             sendMessage();
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const EmergencyScreen()),
-            );
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
           }
         }
       }
