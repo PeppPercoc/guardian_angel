@@ -59,4 +59,18 @@ class LocationService {
       }
     }
   }
+
+  Future<String?> getCurrentPositionStringLatLong() async {
+    Position? pos = await getCurrentPosition();
+    if (pos == null) {
+      return "Permesso negato o nessuna posizione trovata.";
+    } else {
+      List<Placemark> placemarks = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+      if (placemarks.isNotEmpty) {
+        return 'Lat: ${pos.latitude}, Long: ${pos.longitude}';
+      } else {
+        return 'Posizione non trovata';
+      }
+    }
+  }
 }

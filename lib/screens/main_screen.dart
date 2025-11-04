@@ -5,6 +5,7 @@ import 'package:guardian_angel/models/user.dart';
 import 'package:guardian_angel/screens/emergency_screen.dart';
 import 'package:guardian_angel/screens/settings_screen.dart';
 import 'package:guardian_angel/services/sms_service.dart';
+import 'package:guardian_angel/services/location_service.dart';
 import 'package:guardian_angel/widgets/sos_emergency_button.dart';
 import 'package:guardian_angel/widgets/app_navigation_bar.dart';
 import 'home_screen.dart';
@@ -24,6 +25,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final MedicineDatabase medicineDatabase = MedicineDatabase();
   late final SharedPrefsService _prefsService;
+  late final LocationService _locationService;
   User? _user;
   final SmsService smsService = SmsService();
   final GeminiService geminiService = GeminiService();
@@ -49,19 +51,25 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> sendMessage() async {
-    bool success = await smsService.sendSms(
-      'Ciao, questo è un messaggio',
+    final positionLatLong = await _locationService.getCurrentPositionStringLatLong() ?? "Posizione non disponibile";
+    final positionAddress = await _locationService.getCurrentPositionString() ?? "Indirizzo non disponibile";
+    
+    bool success = await smsService.sendSms('''
+SOS! ${_user?.name} ${_user?.lastName} ha bisogno di aiuto.
+La sua posizione: $positionLatLong
+Indirizzo: $positionAddress
+''',
       _user?.emergencyContactPhone ?? '',
     );
     if (!mounted) return;
     if (success) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('SMS inviato')));
+      ).showSnackBar(const SnackBar(content: Text('SMS inviato')));
     } else {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Invio SMS fallito')));
+      ).showSnackBar(const SnackBar(content: Text('Invio SMS fallito')));
     }
   }
 
@@ -69,6 +77,7 @@ class _MainScreenState extends State<MainScreen> {
     await medicineDatabase.init();
     await geminiService.init();
     await _prefsService.init();
+    _locationService = LocationService();
     if (!mounted) return;
     setState(() {
       _isDBReady = true;
@@ -81,6 +90,7 @@ class _MainScreenState extends State<MainScreen> {
       medicineDatabase: medicineDatabase,
       geminiService: geminiService,
       sharedPrefsService: _prefsService,
+      locationService: _locationService,
     ),
     SettingsScreen(
       medicineDatabase: medicineDatabase,

@@ -13,12 +13,14 @@ class HomeScreen extends StatefulWidget {
   final MedicineDatabase? medicineDatabase;
   final GeminiService geminiService;
   final SharedPrefsService? sharedPrefsService;
+  final LocationService locationService;
 
   const HomeScreen({
     super.key,
     this.medicineDatabase,
     required this.geminiService,
     required this.sharedPrefsService,
+    required this.locationService,
   });
 
   @override
@@ -27,12 +29,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<String?> _geminiFuture = Future.value(null);
-  final locationService = LocationService.instance;
+  late final LocationService _locationService;
   User? _user;
 
   @override
   void initState() {
     super.initState();
+    _locationService = widget.locationService;
     _loadUserInfo().then((_) => _requestGemini());
   }
 
@@ -100,7 +103,7 @@ inserire nella risposta i dati dell'utente.
   }
 
   Future<String?> _getPosition() async {
-    return await locationService.getCurrentPositionString();
+    return await _locationService.getCurrentPositionString();
   }
 
   @override
