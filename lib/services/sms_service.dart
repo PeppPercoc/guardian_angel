@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_sender/sms_sender.dart';
 
@@ -27,7 +28,8 @@ class SmsService {
 
     try {
       // sendSms è un metodo statico che richiede parametri named
-      await SmsSender.sendSms(phoneNumber: phoneNumber, message: message);
+      List<Map<String, dynamic>> simCards = await SmsSender.getSimCards();
+      await SmsSender.sendSms(phoneNumber: phoneNumber, message: message, simSlot: simCards[0]['simSlot'],);
       print('SMS inviato a $phoneNumber: $message');
       return true;
     } catch (e) {
