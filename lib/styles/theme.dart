@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-
-class AppColors {
-  static const primary = Color.fromARGB(255, 183, 28, 28);
-  static const secondary = Color.fromARGB(255, 56, 142, 60);
-  static const backgroundSecondary = Color.fromARGB(255, 208, 238, 200);
-  static const backgroundPrimary = Color.fromARGB(255, 255, 226, 226);
-  static const textDark = Color.fromARGB(255, 38, 50, 56);
-}
+export 'app_colors.dart';
+import 'app_colors.dart';
 
 final ThemeData appTheme = ThemeData(
   primaryColor: AppColors.primary,

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_sender/sms_sender.dart';
 
