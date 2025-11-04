@@ -170,7 +170,7 @@ inserire nella risposta i dati dell'utente.
             ),
             const SizedBox(height: 16),
 
-            // Lista di card (scrollabile)
+            // Lista di card
             Expanded(
               child: ListView(
                 physics: const BouncingScrollPhysics(),

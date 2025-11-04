@@ -2,7 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class LocationService {
-  // singleton
+  // Singleton
   LocationService._internal();
   static final LocationService instance = LocationService._internal();
   factory LocationService() => instance;

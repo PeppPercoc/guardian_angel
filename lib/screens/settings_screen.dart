@@ -34,7 +34,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _clearMedicines() async {
-    // usa l'API centralizzata del singleton
     await widget.medicineDatabase.clearAll();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

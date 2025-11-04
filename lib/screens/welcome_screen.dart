@@ -18,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final PageController _controller = PageController();
   int _pageIndex = 0;
 
-  // Chiavi dei form per pagine con form
+  // chiavi per la validazione dei form
   final _userFormKey = GlobalKey<FormState>();
   final _medicalFormKey = GlobalKey<FormState>();
   final _contactFormKey = GlobalKey<FormState>();

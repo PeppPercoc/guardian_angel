@@ -88,21 +88,27 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> showSOSDialog(BuildContext context) async {
     int seconds = 10;
     bool cancelled = false;
+    bool timeExpired = false;
     Timer? timer;
     late StateSetter dialogSetState;
 
     timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!cancelled) {
+      if (!cancelled && !timeExpired) {
         if (seconds > 0) {
           dialogSetState(() {
             seconds--;
           });
         } else {
+          // il tempo è scaduto, fermiamo il timer e chiudiamo il dialog
+          timeExpired = true;
           t.cancel();
           if (mounted) {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const EmergencyScreen()));
+            Navigator.of(context).pop();
+            // dopo aver chiuso il dialog, mandiamo il messaggio e andiamo in emergency
+            sendMessage();
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const EmergencyScreen()),
+            );
           }
         }
       }
@@ -118,20 +124,17 @@ class _MainScreenState extends State<MainScreen> {
             return SOSAlertDialog(
               seconds: seconds,
               onCancel: () {
-                // aggiorna lo stato locale, ferma timer e chiudi dialog
-                setState(() {
-                  cancelled = true;
-                });
+                // annulla il SOS e ferma il timer
+                cancelled = true;
                 timer?.cancel();
                 Navigator.of(context).pop();
               },
               onSend: () {
-                sendMessage();
-                setState(() {
-                  cancelled = false;
-                });
+                // ferma il timer, chiude il dialog, manda il messaggio e va in emergency
+                cancelled = true;
                 timer?.cancel();
                 Navigator.of(context).pop();
+                sendMessage();
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const EmergencyScreen()),
                 );
@@ -141,8 +144,6 @@ class _MainScreenState extends State<MainScreen> {
         );
       },
     );
-
-    timer.cancel();
   }
 
   @override

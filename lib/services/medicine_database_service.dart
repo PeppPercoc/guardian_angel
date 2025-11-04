@@ -12,11 +12,10 @@ class MedicineDatabase {
   MedicineDatabase._internal();
   factory MedicineDatabase() => _instance;
 
-  // Inizializza Hive e apre la box (idempotente)
+  // inizializza Hive e apre la box
   Future<void> init() async {
     if (_initialized) return;
 
-    // Init Flutter (safe ripetere ma meglio non chiamarlo più volte)
     await Hive.initFlutter();
 
     // Registra adapter solo se non sono già registrati

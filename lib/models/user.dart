@@ -48,7 +48,7 @@ class User {
     additionalNotes: json['additionalNotes'] ?? json['notes'] ?? '',
   );
 
-  // Utility: da codificare/decodificare a stringa univoca JSON
+  // converte i dati utente in JSON per il salvataggio o il caricamento
   String encode() => jsonEncode(toJson());
 
   static User decode(String userJson) => User.fromJson(jsonDecode(userJson));

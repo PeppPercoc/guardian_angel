@@ -26,7 +26,7 @@ class SmsService {
     }
 
     try {
-      // sendSms è un metodo statico che richiede parametri named
+      // prendiamo la prima SIM disponibile sul dispositivo
       List<Map<String, dynamic>> simCards = await SmsSender.getSimCards();
       await SmsSender.sendSms(phoneNumber: phoneNumber, message: message, simSlot: simCards[0]['simSlot'],);
       print('SMS inviato a $phoneNumber: $message');
