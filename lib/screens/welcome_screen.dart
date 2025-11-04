@@ -9,7 +9,8 @@ import 'main_screen.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+  final SharedPrefsService sharedPrefsService;
+  const WelcomeScreen({super.key, required this.sharedPrefsService});
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
@@ -39,26 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    _checkIntroSeen();
-  }
-
-  Future<void> _checkIntroSeen() async {
-    sharedPrefsService = SharedPrefsService();
-    await sharedPrefsService.init();
-    final introSeen = await sharedPrefsService.getBool(
-      'introSeen',
-      defaultValue: false,
-    );
-    if (introSeen) {
-      if (!mounted) return;
-      // se l'intro è già visto, vai subito a MainScreen
-      // messo qui perchè cosi non lo faccio nel main
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => MainScreen(sharedPrefsService: sharedPrefsService),
-        ),
-      );
-    }
+    sharedPrefsService = widget.sharedPrefsService;
   }
 
   Future<void> _saveAndContinue() async {

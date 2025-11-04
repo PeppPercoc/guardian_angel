@@ -32,12 +32,16 @@ class LocationService {
           distanceFilter: 0,
           timeLimit: Duration(seconds: 30),
         ),
-        forceAndroidLocationManager: true,
       );
       return position;
     } catch (e) {
+      // Se getCurrentPosition fallisce, prova con last known position
+      try {
+        final lastPosition = await Geolocator.getLastKnownPosition();
+        return lastPosition;
+      } catch (e) {
         return null;
-
+      }
     }
   }
 

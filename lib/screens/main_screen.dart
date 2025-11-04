@@ -14,8 +14,8 @@ import '../services/shared_prefs_service.dart';
 import '../services/gemini_service.dart';
 
 class MainScreen extends StatefulWidget {
-  final SharedPrefsService? sharedPrefsService;
-  const MainScreen({super.key, this.sharedPrefsService});
+  final SharedPrefsService sharedPrefsService;
+  const MainScreen({super.key, required this.sharedPrefsService});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _prefsService = widget.sharedPrefsService ?? SharedPrefsService();
+    _prefsService = widget.sharedPrefsService;
     _initAll();
     _loadUserInfo();
   }

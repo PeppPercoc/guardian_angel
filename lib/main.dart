@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/services/shared_prefs_service.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/main_screen.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  runApp(const GuardianAngelApp());
+  final sharedPrefsService = SharedPrefsService();
+  await sharedPrefsService.init();
+  final introSeen = await sharedPrefsService.getBool('introSeen', defaultValue: false);
+  final initialRoute = introSeen ? '/main' : '/welcome';
+  runApp(GuardianAngelApp(
+    sharedPrefsService: sharedPrefsService,
+    initialRoute: initialRoute,
+  ));
 }
 
 class GuardianAngelApp extends StatelessWidget {
-  const GuardianAngelApp({super.key});
+  final SharedPrefsService sharedPrefsService;
+  final String initialRoute;
+  
+  const GuardianAngelApp({
+    super.key,
+    required this.sharedPrefsService,
+    required this.initialRoute,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Guardian Angel',
       theme: appTheme,
-      initialRoute: '/welcome',
+      initialRoute: initialRoute,
       routes: {
-        '/welcome': (context) => const WelcomeScreen(),
-        '/main': (context) => const MainScreen(),
+        '/welcome': (context) => WelcomeScreen(sharedPrefsService: sharedPrefsService),
+        '/main': (context) => MainScreen(sharedPrefsService: sharedPrefsService),
       },
     );
   }

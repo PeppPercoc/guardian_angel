@@ -61,7 +61,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     try {
       await ScreenBrightness().setApplicationScreenBrightness(1.0);
     } catch (e) {
-      print('Errore impostando la luminosità: $e');
+      // Errore impostando la luminosità
     }
   }
 
@@ -69,7 +69,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     try {
       await ScreenBrightness().resetApplicationScreenBrightness();
     } catch (e) {
-      print('Errore nel resettare luminosità: $e');
+      // Errore nel resettare luminosità
     }
   }
 

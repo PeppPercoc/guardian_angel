@@ -21,7 +21,6 @@ class SmsService {
   Future<bool> sendSms(String message, String phoneNumber) async {
     final hasPermission = await requestPermission();
     if (!hasPermission) {
-      print('Permesso SMS negato');
       return false;
     }
 
@@ -29,10 +28,8 @@ class SmsService {
       // prendiamo la prima SIM disponibile sul dispositivo
       List<Map<String, dynamic>> simCards = await SmsSender.getSimCards();
       await SmsSender.sendSms(phoneNumber: phoneNumber, message: message, simSlot: simCards[0]['simSlot'],);
-      print('SMS inviato a $phoneNumber: $message');
       return true;
     } catch (e) {
-      print('Errore inviando SMS: $e');
       return false;
     }
   }

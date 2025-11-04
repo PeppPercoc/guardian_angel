@@ -68,7 +68,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         _additionalNotesController.text = user.additionalNotes;
       }
     } catch (e) {
-      debugPrint('Errore caricamento user: $e');
+      // Errore caricamento user
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -96,7 +96,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       ).showSnackBar(const SnackBar(content: Text('Profilo aggiornato')));
       Navigator.of(context).pop(true);
     } catch (e) {
-      debugPrint('Errore salvataggio user: $e');
+      // Errore salvataggio user
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Errore salvataggio profilo')),
