@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/app_colors.dart';
 
 class LoadingScreen extends StatelessWidget {
-
   const LoadingScreen({
     super.key,
   });

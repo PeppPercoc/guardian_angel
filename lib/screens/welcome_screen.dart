@@ -192,7 +192,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.security, color: AppColors.secondary, size: 80),
+            Image.asset(
+              'assets/images/Logo.png',
+              width: 120,
+              height: 120,
+              fit: BoxFit.contain,
+            ),
             const SizedBox(height: 28),
             const Text(
               'Benvenuto in Guardian Angel!',

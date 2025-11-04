@@ -8,7 +8,6 @@ class AppColors {
   // Colori di sfondo
   static const Color backgroundSecondary = Color.fromARGB(255, 208, 238, 200);
   static const Color backgroundPrimary = Color.fromARGB(255, 255, 226, 226);
-  static const Color background = Color.fromARGB(255, 208, 238, 200);
 
   // Colore testo
   static const Color textDark = Color.fromARGB(255, 38, 50, 56);
