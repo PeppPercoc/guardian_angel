@@ -234,6 +234,14 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.secondary,
+                foregroundColor: AppColors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 24,
+                  ),
               ),
               onPressed: _save,
               child: const Text('Salva', style: TextStyle(color: AppColors.white)),
