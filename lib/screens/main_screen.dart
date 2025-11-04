@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:guardian_angel/alerts/sos_alert.dart';
 import 'package:guardian_angel/models/user.dart';
 import 'package:guardian_angel/screens/emergency_screen.dart';
 import 'package:guardian_angel/screens/settings_screen.dart';
 import 'package:guardian_angel/services/sms_service.dart';
-import 'package:guardian_angel/styles/theme.dart';
+import 'package:guardian_angel/widgets/sos_emergency_button.dart';
+import 'package:guardian_angel/widgets/app_navigation_bar.dart';
 import 'home_screen.dart';
 import 'scheduler_screen.dart';
 import '../services/medicine_database_service.dart';
@@ -49,11 +49,10 @@ class _MainScreenState extends State<MainScreen> {
       }
     
   }
-
   Future<void> sendMessage() async {
     bool success = await smsService.sendSms(
       'Ciao, questo è un messaggio',
-      _user?.contactPhone ?? '',
+      _user?.emergencyContactPhone ?? '',
     );
 
     if (success) {
@@ -159,116 +158,22 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Column(
         children: [
-          GestureDetector(
-            onTap: () {
+          SOSEmergencyButton(
+            onPressed: () {
               showSOSDialog(context);
             },
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                color: Colors.red,
-              ),
-              child: SafeArea(
-                bottom: false,
-                child: Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 14,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade700,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          // ignore: deprecated_member_use
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.warning_rounded,
-                          color: Colors.white,
-                          size: 26,
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'SOS EMERGENCY',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ),
           Expanded(child: _pages[_selectedIndex]),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha((0.25 * 255).round()),
-              blurRadius: 20,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: 12,
-          ),
-          child: GNav(
-            gap: 8,
-            activeColor: AppColors.secondary,
-            iconSize: 30,
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding / 2,
-              vertical: 12,
-            ),
-            duration: const Duration(milliseconds: 400),
-            tabBackgroundColor: AppColors.backgroundSecondary,
-            color: Colors.grey,
-            tabs: const [
-              GButton(icon: Icons.medication, text: 'Scheduler'),
-              GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.settings, text: 'Settings'),
-            ],
-            selectedIndex: _selectedIndex,
-            onTabChange: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-          ),
-        ),
+      bottomNavigationBar: AppNavigationBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        horizontalPadding: horizontalPadding,
       ),
     );
   }
