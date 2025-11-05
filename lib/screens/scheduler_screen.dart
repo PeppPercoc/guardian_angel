@@ -68,7 +68,9 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
                   medicineDatabase: widget.medicineDatabase,
                   onSave: (medicine) async {
                     await widget.medicineDatabase.addMedicine(medicine);
+                    if (mounted) {
                       Navigator.of(context).pop();
+                    }
                   },
                 ),
               );

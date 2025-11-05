@@ -121,6 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
 
                 if (confirm == true && mounted) {
+                  // ignore: use_build_context_synchronously
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -131,7 +132,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           'user_data',
                           user.encode(),
                         );
-                        Navigator.of(context).pop();
+                        if (mounted) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   );
