@@ -310,7 +310,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _allergensController,
-              decoration: const InputDecoration(labelText: 'Allergie'),
+              decoration: const InputDecoration(labelText: 'Allergie', hintText: 'Nessuna se non ne hai'),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci allergie' : null,
             ),
@@ -319,6 +319,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               controller: _medicalConditionsController,
               decoration: const InputDecoration(
                 labelText: 'Condizioni mediche',
+                hintText: 'Sano se non hai condizioni particolari',
               ),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci condizioni' : null,
