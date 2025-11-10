@@ -5,7 +5,7 @@ import 'package:guardian_angel/services/shared_prefs_service.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/main_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   final sharedPrefsService = SharedPrefsService();
