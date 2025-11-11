@@ -85,11 +85,11 @@ jobs:
           name: app-release.apk
 
       - name: Rename APK
-        run: mv app-release.apk car-sense.apk
+        run: mv app-release.apk Guardian-Angel.apk
 
       - name: Create Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=$(git describe --tags --abbrev=0)
-          gh release create "$TAG" car-sense.apk --generate-notes
+          gh release create "$TAG" Guardian-Angel.apk --generate-notes
