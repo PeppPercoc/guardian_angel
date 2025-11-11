@@ -54,7 +54,8 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
 
     if (picked != null) {
       final now = DateTime.now();
-      final base = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+      final base =
+          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
       setState(() {
         // calcola e salva come ISO8601 strings
         reminderTimes = _computeReminderTimesFromBase(base, repeat);
@@ -100,8 +101,9 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   hintText: 'e.g. Aspirin 100mg',
                 ),
                 onSaved: (val) => name = val ?? '',
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Inserisci il nome del farmaco' : null,
+                validator: (val) => val == null || val.isEmpty
+                    ? 'Inserisci il nome del farmaco'
+                    : null,
               ),
               const SizedBox(height: 10),
 
@@ -112,8 +114,9 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                   hintText: 'e.g. 1 pillola dopo pranzo',
                 ),
                 onSaved: (val) => dosageInstructions = val ?? '',
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Inserisci le istruzioni di dosaggio' : null,
+                validator: (val) => val == null || val.isEmpty
+                    ? 'Inserisci le istruzioni di dosaggio'
+                    : null,
               ),
               const SizedBox(height: 10),
 
@@ -165,7 +168,8 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                     selectedColor: AppColors.secondary,
                     disabledColor: AppColors.backgroundSecondary,
                     labelStyle: TextStyle(
-                      color: repeat == rep ? AppColors.white : AppColors.secondary,
+                      color:
+                          repeat == rep ? AppColors.white : AppColors.secondary,
                     ),
                     onSelected: (selected) async {
                       if (!selected) return;
@@ -178,7 +182,8 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                         final base = DateTime.tryParse(reminderTimes.first);
                         if (base != null) {
                           setState(() {
-                            reminderTimes = _computeReminderTimesFromBase(base, repeat);
+                            reminderTimes =
+                                _computeReminderTimesFromBase(base, repeat);
                           });
                         } else {
                           // fallback: richiedi nuovo orario
@@ -199,7 +204,9 @@ class _AddMedicineFormState extends State<AddMedicineForm> {
                 readOnly: true,
                 controller: TextEditingController(
                   text: endDate != null
-                      ? '${endDate!.year}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}'
+                      ? '${endDate!.day.toString().padLeft(2, '0')}/'
+                          '${endDate!.month.toString().padLeft(2, '0')}/'
+                          '${endDate!.year}'
                       : '',
                 ),
                 decoration: const InputDecoration(
