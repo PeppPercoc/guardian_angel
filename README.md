@@ -1,16 +1,46 @@
-# guardian_angel
+# Guardian Angel
 
-A new Flutter project.
+Un'applicazione mobile Flutter per la gestione della salute personale e della sicurezza in emergenze.
 
-## Getting Started
+## Descrizione
 
-This project is a starting point for a Flutter application.
+Guardian Angel è un'app che consente agli utenti di:
+- **Archiviare informazioni mediche personali** (allergie, condizioni mediche, gruppo sanguigno)
+- **Gestire i farmaci** con promemoria automatici
+- **Salvare contatti di emergenza** per situazioni critiche
+- **Ricevere consigli sanitari personalizzati** tramite IA
+- **Condividere la posizione** in caso di emergenza
 
-A few resources to get you started if this is your first Flutter project:
+## Requisiti
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter 3.35.7+
+- Dart 3.5.0+
+- Android SDK (API 21+)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installazione
+
+```bash
+# Clonare il repository
+git clone https://github.com/PeppPercoc/guardian_angel.git
+cd guardian_angel
+
+# Installare le dipendenze
+flutter pub get
+
+# Configurare il .env con la chiave API Gemini
+echo "GEMINI_API_KEY=your_api_key_here" > .env
+
+# Avviare l'app
+flutter run
+```
+
+## Build
+
+### APK Release
+```bash
+flutter build apk --release
+```
+
+## Licenza
+
+Questo progetto è privato e non è disponibile per l'uso pubblico.
