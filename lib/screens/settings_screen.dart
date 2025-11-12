@@ -5,7 +5,6 @@ import 'package:guardian_angel/styles/app_colors.dart';
 import '../services/medicine_database_service.dart';
 import '../services/shared_prefs_service.dart';
 import 'edit_user_screen.dart';
-import 'package:guardian_angel/widgets/loading_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final MedicineDatabase medicineDatabase;
@@ -21,20 +20,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPrefs();
-  }
-
-  Future<void> _loadPrefs() async {
-    setState(() {
-      _loading = false;
-    });
-  }
-
   Future<void> _clearMedicines() async {
     await widget.medicineDatabase.clearAll();
     if (!mounted) return;
@@ -56,10 +41,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const LoadingScreen();
-    }
-
     return SafeArea(
       bottom: true,
       child: Padding(
@@ -121,7 +102,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
 
                 if (confirm == true && mounted) {
-                  // ignore: use_build_context_synchronously
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -133,7 +113,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           user.encode(),
                         );
                         if (mounted) {
-                          // ignore: use_build_context_synchronously
                           Navigator.of(context).pop();
                         }
                       },
