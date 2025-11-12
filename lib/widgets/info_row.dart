@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:guardian_angel/styles/app_colors.dart';
 
 class InfoRow extends StatelessWidget {
-    final IconData icon;
-    final String label;
-    final String value;
-    final TextStyle valueStyle;
+  final IconData icon;
+  final String label;
+  final String value;
+  final TextStyle valueStyle;
 
   const InfoRow({
     super.key,
@@ -14,7 +14,6 @@ class InfoRow extends StatelessWidget {
     required this.value,
     this.valueStyle = const TextStyle(),
   });
-
 
   @override
   Widget build(BuildContext context) {

@@ -28,58 +28,60 @@ class MedicineList extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (active.isNotEmpty) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              'Farmaci da prendere',
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (active.isNotEmpty) ...[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                'Farmaci da prendere',
+              ),
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: active.length,
-            itemBuilder: (context, index) {
-              final med = active[index];
-              final originalIndex = medicines.indexOf(med);
-              return MedicineCard(
-                medicine: med,
-                index: originalIndex,
-                primaryColor: AppColors.secondary,
-                backgroundColor: AppColors.backgroundSecondary,
-                onDelete: () => onDelete(originalIndex),
-              );
-            },
-          ),
-        ],
-        if (expired.isNotEmpty) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              'Farmaci da non dover prendere più',
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: active.length,
+              itemBuilder: (context, index) {
+                final med = active[index];
+                final originalIndex = medicines.indexOf(med);
+                return MedicineCard(
+                  medicine: med,
+                  index: originalIndex,
+                  primaryColor: AppColors.secondary,
+                  backgroundColor: AppColors.backgroundSecondary,
+                  onDelete: () => onDelete(originalIndex),
+                );
+              },
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: expired.length,
-            itemBuilder: (context, index) {
-              final med = expired[index];
-              final originalIndex = medicines.indexOf(med);
-              return MedicineCard(
-                medicine: med,
-                index: originalIndex,
-                primaryColor: AppColors.primary,
-                backgroundColor: AppColors.backgroundPrimary,
-                onDelete: () => onDelete(originalIndex),
-              );
-            },
-          ),
+          ],
+          if (expired.isNotEmpty) ...[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                'Farmaci da non dover prendere più',
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: expired.length,
+              itemBuilder: (context, index) {
+                final med = expired[index];
+                final originalIndex = medicines.indexOf(med);
+                return MedicineCard(
+                  medicine: med,
+                  index: originalIndex,
+                  primaryColor: AppColors.primary,
+                  backgroundColor: AppColors.backgroundPrimary,
+                  onDelete: () => onDelete(originalIndex),
+                );
+              },
+            ),
+          ],
         ],
-      ],
-    ),
+      ),
     );
   }
 }

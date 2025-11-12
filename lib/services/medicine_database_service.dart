@@ -73,5 +73,6 @@ class MedicineDatabase {
   Future<void> deleteMedicine(int index) async {
     await _box.deleteAt(index);
   }
+
   ValueListenable<Box<Medicine>> get listenable => _box.listenable();
 }

@@ -50,16 +50,16 @@ class LocationService {
     if (pos == null) {
       return "Permesso negato o nessuna posizione trovata.";
     }
-    
+
     try {
       final placemarks = await placemarkFromCoordinates(
-        pos.latitude, 
+        pos.latitude,
         pos.longitude,
       ).timeout(
         const Duration(seconds: 10),
         onTimeout: () => [],
       );
-      
+
       if (placemarks.isNotEmpty) {
         final place = placemarks[0];
         return '${place.street}, ${place.locality}, ${place.country}';

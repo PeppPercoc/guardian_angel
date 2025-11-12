@@ -14,7 +14,8 @@ class GeminiService {
     // legge la chiave dal .env (caricato in main.dart)
     final apiKey = dotenv.env['GEMINI_API_KEY']?.trim();
     if (apiKey == null || apiKey.isEmpty) {
-      throw Exception('GEMINI_API_KEY non trovata nel .env. Aggiungi GEMINI_API_KEY=la_tua_chiave nel file .env');
+      throw Exception(
+          'GEMINI_API_KEY non trovata nel .env. Aggiungi GEMINI_API_KEY=la_tua_chiave nel file .env');
     }
     Gemini.init(apiKey: apiKey, enableDebugging: true);
     _initialized = true;

@@ -12,11 +12,13 @@ typedef OnSaveCallback = void Function(User user);
 class EditUserScreen extends StatefulWidget {
   final SharedPrefsService sharedPrefsService;
   final OnSaveCallback onSave;
-  const EditUserScreen({super.key, required this.sharedPrefsService, required this.onSave});
+  const EditUserScreen(
+      {super.key, required this.sharedPrefsService, required this.onSave});
 
   @override
   State<EditUserScreen> createState() => _EditUserScreenState();
 }
+
 class _EditUserScreenState extends State<EditUserScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = true;
@@ -140,11 +142,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
             TextFormField(
               controller: _lastNameController,
               decoration: const InputDecoration(labelText: 'Cognome'),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Inserisci il cognome' : null,
+              validator: (v) => (v == null || v.trim().isEmpty)
+                  ? 'Inserisci il cognome'
+                  : null,
             ),
             const SizedBox(height: 10),
-           TextFormField(
+            TextFormField(
               readOnly: true,
               controller: _dateOfBirthController,
               decoration: const InputDecoration(
@@ -199,8 +202,9 @@ class _EditUserScreenState extends State<EditUserScreen> {
               decoration: const InputDecoration(
                 labelText: 'Condizioni mediche',
               ),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Inserisci condizioni' : null,
+              validator: (v) => (v == null || v.trim().isEmpty)
+                  ? 'Inserisci condizioni'
+                  : null,
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -216,12 +220,15 @@ class _EditUserScreenState extends State<EditUserScreen> {
             const SizedBox(height: 10),
             InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
-                _emergencyContactPhoneController.text = number.phoneNumber ?? '';
+                _emergencyContactPhoneController.text =
+                    number.phoneNumber ?? '';
               },
               selectorConfig: SelectorConfig(
                 selectorType: PhoneInputSelectorType.DROPDOWN,
               ),
-              initialValue: PhoneNumber(isoCode: 'IT', phoneNumber: _emergencyContactPhoneController.text),
+              initialValue: PhoneNumber(
+                  isoCode: 'IT',
+                  phoneNumber: _emergencyContactPhoneController.text),
               inputDecoration: InputDecoration(
                 labelText: 'Numero di telefono',
                 border: OutlineInputBorder(),
@@ -239,15 +246,16 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 backgroundColor: AppColors.secondary,
                 foregroundColor: AppColors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 24,
-                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 24,
+                ),
               ),
               onPressed: _save,
-              child: const Text('Salva', style: TextStyle(color: AppColors.white)),
+              child:
+                  const Text('Salva', style: TextStyle(color: AppColors.white)),
             ),
           ],
         ),

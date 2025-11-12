@@ -273,7 +273,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 }
               },
             ),
-
             const SizedBox(height: 12),
             DropdownButtonFormField<BloodType>(
               initialValue: _selectedBloodType,
@@ -310,7 +309,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _allergensController,
-              decoration: const InputDecoration(labelText: 'Allergie', hintText: '"Nessuna" se non ne hai'),
+              decoration: const InputDecoration(
+                  labelText: 'Allergie', hintText: '"Nessuna" se non ne hai'),
               validator: (v) =>
                   v == null || v.isEmpty ? 'Inserisci allergie' : null,
             ),
@@ -358,10 +358,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   v == null || v.isEmpty ? 'Inserisci nome contatto' : null,
             ),
             const SizedBox(height: 12),
-
             InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
-                _emergencyContactPhoneController.text = number.phoneNumber ?? '';
+                _emergencyContactPhoneController.text =
+                    number.phoneNumber ?? '';
               },
               selectorConfig: SelectorConfig(
                 selectorType: PhoneInputSelectorType.DROPDOWN,

@@ -10,7 +10,8 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   final sharedPrefsService = SharedPrefsService();
   await sharedPrefsService.init();
-  final introSeen = await sharedPrefsService.getBool('introSeen', defaultValue: false);
+  final introSeen =
+      await sharedPrefsService.getBool('introSeen', defaultValue: false);
   final initialRoute = introSeen ? '/main' : '/welcome';
   runApp(GuardianAngelApp(
     sharedPrefsService: sharedPrefsService,
@@ -21,7 +22,7 @@ Future<void> main() async {
 class GuardianAngelApp extends StatelessWidget {
   final SharedPrefsService sharedPrefsService;
   final String initialRoute;
-  
+
   const GuardianAngelApp({
     super.key,
     required this.sharedPrefsService,
@@ -35,8 +36,10 @@ class GuardianAngelApp extends StatelessWidget {
       theme: appTheme,
       initialRoute: initialRoute,
       routes: {
-        '/welcome': (context) => WelcomeScreen(sharedPrefsService: sharedPrefsService),
-        '/main': (context) => MainScreen(sharedPrefsService: sharedPrefsService),
+        '/welcome': (context) =>
+            WelcomeScreen(sharedPrefsService: sharedPrefsService),
+        '/main': (context) =>
+            MainScreen(sharedPrefsService: sharedPrefsService),
       },
     );
   }

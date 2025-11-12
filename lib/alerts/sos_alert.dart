@@ -24,7 +24,8 @@ class SOSAlertDialog extends StatelessWidget {
           SizedBox(width: 12),
           Text(
             'Emergency Alert',
-            style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: AppColors.primary, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -40,10 +41,13 @@ class SOSAlertDialog extends StatelessWidget {
           Text(
             '$seconds',
             style: const TextStyle(
-              fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             ),
           ),
-          const Text('secondi a meno che tu non annulli.', style: TextStyle(fontSize: 16)),
+          const Text('secondi a meno che tu non annulli.',
+              style: TextStyle(fontSize: 16)),
         ],
       ),
       actionsAlignment: MainAxisAlignment.center,
@@ -59,7 +63,8 @@ class SOSAlertDialog extends StatelessWidget {
                   backgroundColor: AppColors.greyLight,
                   foregroundColor: AppColors.black,
                   padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 icon: const Icon(Icons.close),
                 label: const Text('Annulla SOS'),
@@ -71,7 +76,8 @@ class SOSAlertDialog extends StatelessWidget {
                   backgroundColor: AppColors.red,
                   foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 icon: const Icon(Icons.send),
                 label: const Text('Invia Ora'),

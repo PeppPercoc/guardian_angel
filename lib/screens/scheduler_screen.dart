@@ -16,7 +16,6 @@ class SchedulerScreen extends StatefulWidget {
 }
 
 class _SchedulerScreenState extends State<SchedulerScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -30,36 +29,35 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
         final medicines = widget.medicineDatabase.getAllMedicines();
 
         return Scaffold(
-      body:
-        SafeArea(
-      bottom: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Medicine Scheduler',
-              style: TextStyle(
-                color: AppColors.secondary,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+          body: SafeArea(
+            bottom: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Medicine Scheduler',
+                    style: TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: MedicineList(
+                      medicines: medicines,
+                      onDelete: (index) async {
+                        await widget.medicineDatabase.deleteMedicine(index);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: MedicineList(
-            medicines: medicines,
-            onDelete: (index) async {
-              await widget.medicineDatabase.deleteMedicine(index);
-            },
           ),
-            ),
-          ],
-        ),
-      ),
-    ), 
-    floatingActionButton: FloatingActionButton(
+          floatingActionButton: FloatingActionButton(
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -78,7 +76,7 @@ class _SchedulerScreenState extends State<SchedulerScreen> {
             child: const Icon(Icons.add, color: AppColors.white),
           ),
         );
-         /*  
+        /*  
         return Scaffold(
           appBar: AppBar(
             title: const Text(

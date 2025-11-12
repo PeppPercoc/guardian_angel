@@ -3,7 +3,8 @@ import 'package:hive/hive.dart';
 part 'medicine.g.dart';
 
 @HiveType(typeId: 7)
-enum Repeat { // enum per i tipi di ricorrenza
+enum Repeat {
+  // enum per i tipi di ricorrenza
   @HiveField(0)
   oncePerDay,
   @HiveField(1)

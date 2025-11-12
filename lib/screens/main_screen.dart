@@ -52,10 +52,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> sendMessage() async {
-    final positionLatLong = await _locationService.getCurrentPositionStringLatLong() ?? "Posizione non disponibile";
-    final positionAddress = await _locationService.getCurrentPositionString() ?? "Indirizzo non disponibile";
-    
-    bool success = await smsService.sendSms('''
+    final positionLatLong =
+        await _locationService.getCurrentPositionStringLatLong() ??
+            "Posizione non disponibile";
+    final positionAddress = await _locationService.getCurrentPositionString() ??
+        "Indirizzo non disponibile";
+
+    bool success = await smsService.sendSms(
+      '''
 SOS! ${_user?.name} ${_user?.lastName} ha bisogno di aiuto.
 La sua posizione: $positionLatLong
 Indirizzo: $positionAddress
@@ -86,18 +90,18 @@ Indirizzo: $positionAddress
   }
 
   List<Widget> get _pages => [
-    SchedulerScreen(medicineDatabase: medicineDatabase),
-    HomeScreen(
-      medicineDatabase: medicineDatabase,
-      geminiService: geminiService,
-      sharedPrefsService: _prefsService,
-      locationService: _locationService,
-    ),
-    SettingsScreen(
-      medicineDatabase: medicineDatabase,
-      sharedPrefsService: _prefsService,
-    ),
-  ];
+        SchedulerScreen(medicineDatabase: medicineDatabase),
+        HomeScreen(
+          medicineDatabase: medicineDatabase,
+          geminiService: geminiService,
+          sharedPrefsService: _prefsService,
+          locationService: _locationService,
+        ),
+        SettingsScreen(
+          medicineDatabase: medicineDatabase,
+          sharedPrefsService: _prefsService,
+        ),
+      ];
 
   Future<void> showSOSDialog(BuildContext context) async {
     int seconds = 10;

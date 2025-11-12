@@ -41,8 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _requestGemini() async {
-    final prompt =
-        '''
+    final prompt = '''
 è stato chiesto ad un utente alcune informazioni personali per fornire consigli sanitari personalizzati. Ecco i dati raccolti:
 - Data di nascita: ${_user?.dateOfBirth}
 - Nome: ${_user?.name}

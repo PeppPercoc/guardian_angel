@@ -8,7 +8,13 @@ class MedicineCard extends StatelessWidget {
   final VoidCallback onDelete;
   final Color primaryColor;
   final Color backgroundColor;
-  const MedicineCard({super.key, required this.medicine, required this.index, required this.onDelete, required this.primaryColor, required this.backgroundColor});
+  const MedicineCard(
+      {super.key,
+      required this.medicine,
+      required this.index,
+      required this.onDelete,
+      required this.primaryColor,
+      required this.backgroundColor});
 
   String _displayTimeFromIso(String iso) {
     try {
@@ -23,7 +29,7 @@ class MedicineCard extends StatelessWidget {
     // nessun controllo perchè non può inserire farmaci senza orari
     return medicine.reminderTimes.map(_displayTimeFromIso).join(', ');
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -32,62 +38,66 @@ class MedicineCard extends StatelessWidget {
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Icon((Icons.medical_services_outlined), color: primaryColor, size: 24),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            padding: const EdgeInsets.all(10),
+            child: Icon((Icons.medical_services_outlined),
+                color: primaryColor, size: 24),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  medicine.name,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 6),
+                if (medicine.medicineInstructions.isEmpty)
                   Text(
-                    medicine.name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 6),
-                  if (medicine.medicineInstructions.isEmpty)
-                    Text(
-                      medicine.dosageInstructions,
-                      style: const TextStyle(fontSize: 14, color: AppColors.black),
-                    )
-                  else
-                    Text(
-                      '${medicine.dosageInstructions} - ${medicine.medicineInstructions}',
-                      style: const TextStyle(fontSize: 14, color: AppColors.black),
-                    ),
+                    medicine.dosageInstructions,
+                    style:
+                        const TextStyle(fontSize: 14, color: AppColors.black),
+                  )
+                else
                   Text(
-                    ('Orari: ${_displayTimes()}'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.black),
+                    '${medicine.dosageInstructions} - ${medicine.medicineInstructions}',
+                    style:
+                        const TextStyle(fontSize: 14, color: AppColors.black),
                   ),
-                  Text(
-                    (medicine.endDate != null
-                ? '${medicine.endDate?.day}/${medicine.endDate?.month}/${medicine.endDate?.year}'
-                : 'Nessuna data di fine'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.black),
-                  ),
-                  Text(
-                    (medicine.additionalNotes != null ? '${medicine.additionalNotes}' : '---'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.black),
-                  ),
-                ],
-              ),
+                Text(
+                  ('Orari: ${_displayTimes()}'),
+                  style: const TextStyle(fontSize: 14, color: AppColors.black),
+                ),
+                Text(
+                  (medicine.endDate != null
+                      ? '${medicine.endDate?.day}/${medicine.endDate?.month}/${medicine.endDate?.year}'
+                      : 'Nessuna data di fine'),
+                  style: const TextStyle(fontSize: 14, color: AppColors.black),
+                ),
+                Text(
+                  (medicine.additionalNotes != null
+                      ? '${medicine.additionalNotes}'
+                      : '---'),
+                  style: const TextStyle(fontSize: 14, color: AppColors.black),
+                ),
+              ],
             ),
-            IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: primaryColor,
-              ),
-              onPressed: onDelete,
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: primaryColor,
             ),
-            /*
+            onPressed: onDelete,
+          ),
+          /*
       child: ListTile(
         title: Text(medicine.name),
         subtitle: Column(
@@ -114,8 +124,7 @@ class MedicineCard extends StatelessWidget {
         },
       ),
       */
-          ]
-        ),
+        ]),
       ),
     );
   }

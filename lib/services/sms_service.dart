@@ -27,7 +27,11 @@ class SmsService {
     try {
       // prendiamo la prima SIM disponibile sul dispositivo
       List<Map<String, dynamic>> simCards = await SmsSender.getSimCards();
-      await SmsSender.sendSms(phoneNumber: phoneNumber, message: message, simSlot: simCards[0]['simSlot'],);
+      await SmsSender.sendSms(
+        phoneNumber: phoneNumber,
+        message: message,
+        simSlot: simCards[0]['simSlot'],
+      );
       return true;
     } catch (e) {
       return false;
